@@ -4,8 +4,243 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>واجهة المستخدم</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #f4f7f6;
+            overflow-x: hidden;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .header .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header .icon {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .announcement-bar {
+            position: relative;
+            overflow: hidden;
+            background-color: #ffc107;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+        .announcement-slider {
+            display: flex;
+            animation: slide 20s linear infinite;
+        }
+        .announcement-item {
+            min-width: 100%;
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+        }
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-100%); }
+            50% { transform: translateX(-200%); }
+            75% { transform: translateX(-300%); }
+            100% { transform: translateX(-400%); }
+        }
+        .filters {
+            padding: 15px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .filter-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .filter-button:hover {
+            background-color: #0056b3;
+        }
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .category {
+            text-align: center;
+            margin: 15px;
+            width: calc(50% - 30px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .category img {
+            width: 100%;
+            height: 150px;
+        }
+        .category-name {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .footer .icon {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: #007bff;
+            color: white;
+            transition: left 0.3s ease;
+            padding-top: 60px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .sidebar a:hover {
+            background-color: #0056b3;
+        }
+        .sidebar .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .settings-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .settings-panel h2 {
+            margin-top: 0;
+        }
+        .settings-panel label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .settings-panel input[type="color"], .settings-panel input[type="range"] {
+            width: 100%;
+        }
+        .settings-panel button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .settings-panel button:hover {
+            background-color: #0056b3;
+        }
+        .add-item-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 100%;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .add-item-panel h2 {
+            margin-top: 0;
+        }
+        .add-item-panel label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .add-item-panel input[type="text"], .add-item-panel input[type="url"], .add-item-panel input[type="file"] {
+            width: 100%;
+        }
+        .add-item-panel button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .add-item-panel button:hover {
+            background-color: #0056b3;
+        }
+        .search-bar {
+            padding: 15px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
 
@@ -44,33 +279,165 @@
     </div>
 
     <div class="sidebar" id="sidebar">
-        <i class="fas fa-times close-btn" id="closeSidebar"></i>
-        <a href="#">الصفحة الرئيسية</a>
-        <a href="#">المنتجات</a>
-        <a href="#">الإعدادات</a>
-        <a href="#">تسجيل الخروج</a>
+        <span class="close-btn" id="sidebarClose">&times;</span>
+        <a href="#" id="settingsToggle">الإعدادات</a>
+        <a href="#" id="addAdToggle">إضافة إعلان</a>
+        <a href="#" id="addCategoryToggle">إضافة فئة</a>
+        <a href="#" id="addFilterToggle">إضافة فلتر</a>
+        <a href="#" id="searchToggle">البحث</a>
     </div>
 
     <div class="settings-panel" id="settingsPanel">
-        <h2>إعدادات</h2>
-        <label for="bgColor">اختر لون الخلفية:</label>
-        <input type="color" id="bgColor" name="bgColor">
+        <h2>إعدادات الواجهة</h2>
+        <label for="backgroundColor">لون الخلفية:</label>
+        <input type="color" id="backgroundColor" name="backgroundColor" value="#f4f7f6">
+        <label for="textColor">لون النصوص:</label>
+        <input type="color" id="textColor" name="textColor" value="#333">
+        <label for="titleColor">لون العناوين:</label>
+        <input type="color" id="titleColor" name="titleColor" value="#007bff">
         <label for="fontSize">حجم الخط:</label>
-        <input type="range" id="fontSize" name="fontSize" min="12" max="30">
-        <button id="applySettings">تطبيق</button>
+        <input type="range" id="fontSize" name="fontSize" min="12" max="24" value="16">
+        <label for="adHeight">ارتفاع الإعلانات:</label>
+        <input type="range" id="adHeight" name="adHeight" min="100" max="300" value="150">
+        <label for="categoryWidth">عرض الفئات:</label>
+        <input type="range" id="categoryWidth" name="categoryWidth" min="150" max="300" value="200">
+        <button onclick="applySettings()">تطبيق الإعدادات</button>
     </div>
 
-    <div class="add-item-panel" id="addItemPanel">
-        <h2>إضافة منتج</h2>
-        <label for="itemName">اسم المنتج:</label>
-        <input type="text" id="itemName">
-        <label for="itemImage">صورة المنتج:</label>
-        <input type="file" id="itemImage">
-        <label for="itemUrl">رابط المنتج:</label>
-        <input type="url" id="itemUrl">
-        <button id="saveItem">حفظ</button>
+    <div class="add-item-panel" id="addAdPanel">
+        <h2>إضافة إعلان</h2>
+        <label for="adText">نص الإعلان:</label>
+        <input type="text" id="adText">
+        <label for="adImage">رابط الصورة:</label>
+        <input type="url" id="adImage">
+        <button onclick="addAd()">إضافة إعلان</button>
     </div>
 
-    <script src="script.js"></script>
+    <div class="add-item-panel" id="addCategoryPanel">
+        <h2>إضافة فئة</h2>
+        <label for="categoryName">اسم الفئة:</label>
+        <input type="text" id="categoryName">
+        <label for="categoryImage">رابط الصورة:</label>
+        <input type="url" id="categoryImage">
+        <button onclick="addCategory()">إضافة فئة</button>
+    </div>
+
+    <div class="add-item-panel" id="addFilterPanel">
+        <h2>إضافة فلتر</h2>
+        <label for="filterName">اسم الفلتر:</label>
+        <input type="text" id="filterName">
+        <button onclick="addFilter()">إضافة فلتر</button>
+    </div>
+
+    <script>
+        // Sidebar toggle
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').style.left = '0';
+        });
+        document.getElementById('sidebarClose').addEventListener('click', function() {
+            document.getElementById('sidebar').style.left = '-300px';
+        });
+
+        // Settings panel toggle
+        document.getElementById('settingsToggle').addEventListener('click', function() {
+            document.getElementById('settingsPanel').style.display = 'block';
+        });
+
+        // Add Ad panel toggle
+        document.getElementById('addAdToggle').addEventListener('click', function() {
+            document.getElementById('addAdPanel').style.display = 'block';
+        });
+
+        // Add Category panel toggle
+        document.getElementById('addCategoryToggle').addEventListener('click', function() {
+            document.getElementById('addCategoryPanel').style.display = 'block';
+        });
+
+        // Add Filter panel toggle
+        document.getElementById('addFilterToggle').addEventListener('click', function() {
+            document.getElementById('addFilterPanel').style.display = 'block';
+        });
+
+        // Search toggle
+        document.getElementById('searchToggle').addEventListener('click', function() {
+            document.getElementById('searchInput').focus();
+        });
+
+        // Hide panels when clicking outside
+        document.querySelectorAll('.settings-panel, .add-item-panel').forEach(panel => {
+            panel.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        });
+
+        function applySettings() {
+            document.body.style.backgroundColor = document.getElementById('backgroundColor').value;
+            document.querySelector('.header').style.color = document.getElementById('titleColor').value;
+            document.querySelector('.announcement-bar').style.backgroundColor = document.getElementById('backgroundColor').value;
+            document.querySelector('.announcement-bar').style.fontSize = document.getElementById('fontSize').value + 'px';
+            document.querySelectorAll('.announcement-item').forEach(item => {
+                item.style.height = document.getElementById('adHeight').value + 'px';
+            });
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.style.width = document.getElementById('categoryWidth').value + 'px';
+            });
+        }
+
+        function addAd() {
+            const text = document.getElementById('adText').value;
+            const image = document.getElementById('adImage').value;
+            const adElement = document.createElement('div');
+            adElement.className = 'announcement-item';
+            adElement.style.backgroundImage = `url(${image})`;
+            adElement.innerText = text;
+            document.getElementById('announcementSlider').appendChild(adElement);
+            document.getElementById('addAdPanel').style.display = 'none';
+            document.getElementById('adText').value = '';
+            document.getElementById('adImage').value = '';
+        }
+
+        function addCategory() {
+            const name = document.getElementById('categoryName').value;
+            const image = document.getElementById('categoryImage').value;
+            const categoryElement = document.createElement('div');
+            categoryElement.className = 'category';
+            categoryElement.innerHTML = `
+                <img src="${image}" alt="${name}">
+                <div class="category-name">${name}</div>
+            `;
+            document.getElementById('categories').appendChild(categoryElement);
+            document.getElementById('addCategoryPanel').style.display = 'none';
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryImage').value = '';
+        }
+
+        function addFilter() {
+            const name = document.getElementById('filterName').value;
+            const filterButton = document.createElement('button');
+            filterButton.className = 'filter-button';
+            filterButton.innerText = name;
+            document.querySelector('.filters').appendChild(filterButton);
+            document.getElementById('addFilterPanel').style.display = 'none';
+            document.getElementById('filterName').value = '';
+        }
+
+        // Search function
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchText = this.value.toLowerCase();
+            document.querySelectorAll('.category, .announcement-item').forEach(item => {
+                const itemName = item.querySelector('.category-name') ? item.querySelector('.category-name').innerText.toLowerCase() : '';
+                const itemText = item.innerText.toLowerCase();
+                if (itemName.includes(searchText) || itemText.includes(searchText)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
 </body>
-</html>
+    </html>
+    
