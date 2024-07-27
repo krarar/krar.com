@@ -44,159 +44,33 @@
     </div>
 
     <div class="sidebar" id="sidebar">
-        <span class="close-btn" id="sidebarClose">&times;</span>
-        <a href="#" id="settingsToggle">الإعدادات</a>
-        <a href="#" id="addAdToggle">إضافة إعلان</a>
-        <a href="#" id="addCategoryToggle">إضافة فئة</a>
-        <a href="#" id="addFilterToggle">إضافة فلتر</a>
-        <a href="#" id="searchToggle">البحث</a>
+        <i class="fas fa-times close-btn" id="closeSidebar"></i>
+        <a href="#">الصفحة الرئيسية</a>
+        <a href="#">المنتجات</a>
+        <a href="#">الإعدادات</a>
+        <a href="#">تسجيل الخروج</a>
     </div>
 
     <div class="settings-panel" id="settingsPanel">
-        <h2>إعدادات الواجهة</h2>
-        <label for="backgroundColor">لون الخلفية:</label>
-        <input type="color" id="backgroundColor" name="backgroundColor" value="#f4f7f6">
-        <label for="textColor">لون النصوص:</label>
-        <input type="color" id="textColor" name="textColor" value="#333">
-        <label for="titleColor">لون العناوين:</label>
-        <input type="color" id="titleColor" name="titleColor" value="#007bff">
+        <h2>إعدادات</h2>
+        <label for="bgColor">اختر لون الخلفية:</label>
+        <input type="color" id="bgColor" name="bgColor">
         <label for="fontSize">حجم الخط:</label>
-        <input type="range" id="fontSize" name="fontSize" min="12" max="24" value="16">
-        <label for="adHeight">ارتفاع الإعلانات:</label>
-        <input type="range" id="adHeight" name="adHeight" min="100" max="300" value="150">
-        <label for="categoryWidth">عرض الفئات:</label>
-        <input type="range" id="categoryWidth" name="categoryWidth" min="150" max="300" value="200">
-        <button onclick="applySettings()">تطبيق الإعدادات</button>
+        <input type="range" id="fontSize" name="fontSize" min="12" max="30">
+        <button id="applySettings">تطبيق</button>
     </div>
 
-    <div class="add-item-panel" id="addAdPanel">
-        <h2>إضافة إعلان</h2>
-        <label for="adText">نص الإعلان:</label>
-        <input type="text" id="adText">
-        <label for="adImage">رابط الصورة:</label>
-        <input type="url" id="adImage">
-        <button onclick="addAd()">إضافة إعلان</button>
+    <div class="add-item-panel" id="addItemPanel">
+        <h2>إضافة منتج</h2>
+        <label for="itemName">اسم المنتج:</label>
+        <input type="text" id="itemName">
+        <label for="itemImage">صورة المنتج:</label>
+        <input type="file" id="itemImage">
+        <label for="itemUrl">رابط المنتج:</label>
+        <input type="url" id="itemUrl">
+        <button id="saveItem">حفظ</button>
     </div>
 
-    <div class="add-item-panel" id="addCategoryPanel">
-        <h2>إضافة فئة</h2>
-        <label for="categoryName">اسم الفئة:</label>
-        <input type="text" id="categoryName">
-        <label for="categoryImage">رابط الصورة:</label>
-        <input type="url" id="categoryImage">
-        <button onclick="addCategory()">إضافة فئة</button>
-    </div>
-
-    <div class="add-item-panel" id="addFilterPanel">
-        <h2>إضافة فلتر</h2>
-        <label for="filterName">اسم الفلتر:</label>
-        <input type="text" id="filterName">
-        <button onclick="addFilter()">إضافة فلتر</button>
-    </div>
-
-    <script>
-        // Sidebar toggle
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            document.getElementById('sidebar').style.left = '0';
-        });
-        document.getElementById('sidebarClose').addEventListener('click', function() {
-            document.getElementById('sidebar').style.left = '-300px';
-        });
-
-        // Settings panel toggle
-        document.getElementById('settingsToggle').addEventListener('click', function() {
-            document.getElementById('settingsPanel').style.display = 'block';
-        });
-
-        // Add Ad panel toggle
-        document.getElementById('addAdToggle').addEventListener('click', function() {
-            document.getElementById('addAdPanel').style.display = 'block';
-        });
-
-        // Add Category panel toggle
-        document.getElementById('addCategoryToggle').addEventListener('click', function() {
-            document.getElementById('addCategoryPanel').style.display = 'block';
-        });
-
-        // Add Filter panel toggle
-        document.getElementById('addFilterToggle').addEventListener('click', function() {
-            document.getElementById('addFilterPanel').style.display = 'block';
-        });
-
-        // Search toggle
-        document.getElementById('searchToggle').addEventListener('click', function() {
-            document.getElementById('searchInput').focus();
-        });
-
-        // Hide panels when clicking outside
-        document.querySelectorAll('.settings-panel, .add-item-panel').forEach(panel => {
-            panel.addEventListener('click', function(event) {
-                if (event.target === this) {
-                    this.style.display = 'none';
-                }
-            });
-        });
-
-        function applySettings() {
-            document.body.style.backgroundColor = document.getElementById('backgroundColor').value;
-            document.querySelector('.header').style.color = document.getElementById('titleColor').value;
-            document.querySelector('.announcement-bar').style.backgroundColor = document.getElementById('backgroundColor').value;
-            document.querySelector('.announcement-bar').style.fontSize = document.getElementById('fontSize').value + 'px';
-            document.querySelectorAll('.announcement-item').forEach(item => {
-                item.style.height = document.getElementById('adHeight').value + 'px';
-            });
-            document.querySelectorAll('.category').forEach(cat => {
-                cat.style.width = document.getElementById('categoryWidth').value + 'px';
-            });
-        }
-
-        function addAd() {
-            const text = document.getElementById('adText').value;
-            const image = document.getElementById('adImage').value;
-            const adElement = document.createElement('div');
-            adElement.className = 'announcement-item';
-            adElement.style.backgroundImage = `url(${image})`;
-            adElement.innerText = text;
-            document.getElementById('announcementSlider').appendChild(adElement);
-            document.getElementById('addAdPanel').style.display = 'none';
-            document.getElementById('adText').value = '';
-            document.getElementById('adImage').value = '';
-        }
-
-        function addCategory() {
-            const name = document.getElementById('categoryName').value;
-            const image = document.getElementById('categoryImage').value;
-            const categoryElement = document.createElement('div');
-            categoryElement.className = 'category';
-            categoryElement.innerHTML = `
-                <img src="${image}" alt="${name}">
-                <div class="category-name">${name}</div>
-            `;
-            document.getElementById('categories').appendChild(categoryElement);
-            document.getElementById('addCategoryPanel').style.display = 'none';
-            document.getElementById('categoryName').value = '';
-            document.getElementById('categoryImage').value = '';
-        }
-
-        function addFilter() {
-            const name = document.getElementById('filterName').value;
-            const filterButton = document.createElement('button');
-            filterButton.className = 'filter-button';
-            filterButton.innerText = name;
-            document.querySelector('.filters').appendChild(filterButton);
-            document.getElementById('addFilterPanel').style.display = 'none';
-            document.getElementById('filterName').value = '';
-        }
-
-        // Search function
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const searchText = this.value.toLowerCase();
-            document.querySelectorAll('.category, .announcement-item').forEach(item => {
-                const itemName = item.querySelector('.category-name') ? item.querySelector('.category-name').innerText.toLowerCase() : item.innerText.toLowerCase();
-                item.style.display = itemName.includes(searchText) ? 'block' : 'none';
-            });
-        });
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
