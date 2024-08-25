@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل المحامين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f0f3f6;
+            --text-color: #2c3e50;
+            --card-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --image-shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .title-bar h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .title-bar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .title-bar button:hover {
+            transform: scale(1.1);
+        }
+
+        #bottom-toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--card-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px var(--shadow-color);
+        }
+
+        #bottom-toolbar a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #bottom-toolbar i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        #lawyers-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .lawyer-card {
+            position: relative;
+            margin: 10px;
+            flex: 1 1 calc(50% - 20px);
+            max-width: calc(50% - 20px);
+            cursor: pointer;
+        }
+
+        .lawyer-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .lawyer-name {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1003;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container form input,
+        .form-container form textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid var(--text-color);
+            border-radius: 5px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .form-container form button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container form button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        #search-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 100px;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        #search-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #search-input {
+            width: 80%;
+            max-width: 600px;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #search-input:focus {
+            outline: none;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #close-search {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background-color: var(--card-color);
+            box-shadow: -2px 0 10px var(--shadow-color);
+            padding-top: 70px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1001;
+        }
+
+        #sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar nav ul li {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--background-color);
+        }
+
+        #sidebar nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        #sidebar nav ul li a i {
+            margin-left: 15px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title-bar">
+            <button id="menu-btn"><i class="fas fa-bars"></i></button>
+            <h1>دليل المحامين</h1>
+            <button id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+    </header>
+
+    <aside id="sidebar">
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="recent.html"><i class="fas fa-history"></i> آخر الزيارات</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                <li><a href="about.html"><i class="fas fa-info-circle"></i> عن التطبيق</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="ابحث عن محامٍ...">
+        <i id="close-search" class="fas fa-times"></i>
+    </div>
+
+    <div id="lawyers-list">
+        <!-- سيتم إضافة بطاقات المحامين هنا بشكل ديناميكي -->
+    </div>
+
+    <div id="bottom-toolbar">
+        <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+        <a href="#" id="add-lawyer-btn"><i class="fas fa-plus-circle"></i> إضافة محامٍ</a>
+    </div>
+
+    <div id="form-container" class="form-container">
+        <form id="lawyer-form">
+            <input type="text" id="name" name="name" placeholder="اسم المحامي" required>
+            <input type="tel" id="phone" name="phone" placeholder="رقم الهاتف" required>
+            <textarea id="description" name="description" placeholder="وصف قصير" required></textarea>
+            <input type="file" id="image" name="image" accept="image/*" required>
+            <button type="submit">إضافة المحامي</button>
+        </form>
+    </div>
+
+    <div id="lawyer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img class="modal-image" src="" alt="صورة المحامي">
+            <h2 id="modal-name"></h2>
+            <p id="modal-description"></p>
+            <p id="modal-phone"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const searchBtn = document.getElementById('search-btn');
+            const closeSearchBtn = document.getElementById('close-search');
+            const sidebar = document.getElementById('sidebar');
+            const searchContainer = document.getElementById('search-container');
+            const searchInput = document.getElementById('search-input');
+            const formContainer = document.getElementById('form-container');
+            const addLawyerBtn = document.getElementById('add-lawyer-btn');
+            const lawyerForm = document.getElementById('lawyer-form');
+            const lawyersList = document.getElementById('lawyers-list');
+            const toolbar = document.querySelector('header');
+            const modal = document.getElementById('lawyer-modal');
+            const closeModal = document.getElementsByClassName('close')[0];
+            let lawyers = [];
+
+            // دالة لفتح القائمة الجانبية
+            function openSidebar() {
+                sidebar.style.transform = 'translateX(0)';
+                toolbar.style.display = 'none';
+            }
+
+            // دالة لإغلاق القائمة الجانبية
+            function closeSidebar() {
+                sidebar.style.transform = 'translateX(100%)';
+                toolbar.style.display = 'flex';
+            }
+
+            // دالة لفتح نافذة البحث
+            function openSearch() {
+                searchContainer.classList.add('active');
+            }
+
+            // دالة لإغلاق نافذة البحث
+            function closeSearch() {
+                searchContainer.classList.remove('active');
+            }
+
+            // دالة لفتح نموذج إضافة محامي
+            function openAddLawyerForm() {
+                formContainer.style.display = 'block';
+            }
+
+            // دالة لإغلاق نموذج إضافة محامي
+            function closeAddLawyerForm() {
+                formContainer.style.display = 'none';
+            }
+
+            // دالة لعرض المحامين
+            function displayLawyers(lawyersArray) {
+                lawyersList.innerHTML = '';
+                lawyersArray.forEach(lawyer => {
+                    const card = document.createElement('div');
+                    card.classList.add('lawyer-card');
+                    card.innerHTML = `
+                        <img src="${lawyer.image}" alt="${lawyer.name}">
+                        <div class="lawyer-name">${lawyer.name}</div>
+                    `;
+                    card.addEventListener('click', () => showLawyerDetails(lawyer));
+                    lawyersList.appendChild(card);
+                });
+            }
+
+            // دالة لعرض تفاصيل المحامي
+            function showLawyerDetails(lawyer) {
+                document.querySelector('.modal-image').src = lawyer.image;
+                document.getElementById('modal-name').textContent = lawyer.name;
+                document.getElementById('modal-description').textContent = lawyer.description;
+                document.getElementById('modal-phone').textContent = `الهاتف: ${lawyer.phone}`;
+                modal.style.display = 'block';
+            }
+
+            // إضافة المستمعين للأحداث
+            menuBtn.addEventListener('click', openSidebar);
+            searchBtn.addEventListener('click', openSearch);
+            closeSearchBtn.addEventListener('click', closeSearch);
+            addLawyerBtn.addEventListener('click', openAddLawyerForm);
+
+            closeModal.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+          window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+                if (event.target == formContainer) {
+                    closeAddLawyerForm();
+                }
+            }
+
+            sidebar.addEventListener('click', function (event) {
+                if (event.target === sidebar) {
+                    closeSidebar();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeSearch();
+                    closeSidebar();
+                    modal.style.display = 'none';
+                }
+            });
+
+            // البحث في قائمة المحامين
+            searchInput.addEventListener('input', function () {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredLawyers = lawyers.filter(lawyer => 
+                    lawyer.name.toLowerCase().includes(searchTerm) ||
+                    lawyer.description.toLowerCase().includes(searchTerm)
+                );
+                displayLawyers(filteredLawyers);
+            });
+
+            // إضافة محامي جديد
+            lawyerForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(lawyerForm);
+                const lawyer = {
+                    id: Date.now(),
+                    name: formData.get('name'),
+                    phone: formData.get('phone'),
+                    description: formData.get('description'),
+                    image: URL.createObjectURL(formData.get('image'))
+                };
+                lawyers.push(lawyer);
+                displayLawyers(lawyers);
+                lawyerForm.reset();
+                closeAddLawyerForm();
+            });
+
+            // عرض المحامين الافتراضيين (يمكن استبدال هذا بطلب API في تطبيق حقيقي)
+            const defaultLawyers = [
+                { id: 1, name: "أحمد محمد", phone: "0123456789", description: "محامي متخصص في القانون المدني", image: "https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ad_images%2F1000087777.jpg?alt=media&token=1cf641e0-f24d-431f-9d00-c6942b85b6f4" },
+                { id: 2, name: "سارة علي", phone: "0987654321", description: "محامية متخصصة في قانون الأسرة", image: "https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ad_images%2F1000087777.jpg?alt=media&token=1cf641e0-f24d-431f-9d00-c6942b85b6f4" },
+                { id: 3, name: "محمود خالد", phone: "0111222333", description: "محامي متخصص في القانون التجاري", image: "https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ad_images%2F1000087777.jpg?alt=media&token=1cf641e0-f24d-431f-9d00-c6942b85b6f4" }
+            ];
+
+            lawyers = defaultLawyers;
+            displayLawyers(lawyers);
+        });
+    </script>
+</body>
+</html>
