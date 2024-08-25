@@ -255,11 +255,11 @@
     <aside id="sidebar">
         <nav>
             <ul>
-                <li><a href="#"><i class="fas fa-home"></i> الرئيسية</a></li>
-                <li><a href="#"><i class="fas fa-heart"></i> المفضلة</a></li>
-                <li><a href="#"><i class="fas fa-history"></i> آخر الزيارات</a></li>
-                <li><a href="#"><i class="fas fa-cog"></i> الإعدادات</a></li>
-                <li><a href="#"><i class="fas fa-info-circle"></i> عن التطبيق</a></li>
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="recent.html"><i class="fas fa-history"></i> آخر الزيارات</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                <li><a href="about.html"><i class="fas fa-info-circle"></i> عن التطبيق</a></li>
             </ul>
         </nav>
     </aside>
@@ -271,7 +271,7 @@
 
     <div id="search-result"></div>
 
-    <main>
+       <main>
         <div class="categories-grid">
             <a href="lawyers.html" class="category" data-category="محامون">
                 <i class="fas fa-gavel"></i>
@@ -317,119 +317,52 @@
     </main>
 
     <div id="bottom-toolbar">
-        <a href="index.html" id="home-btn"><i class="fas fa-home"></i>الرئيسية</a>
-        <a href="#" id="categories-btn"><i class="fas fa-th-large"></i>الفئات</a>
-        <a href="#" id="favorites-btn"><i class="fas fa-heart"></i>المفضلة</a>
-        <a href="#" id="profile-btn"><i class="fas fa-user"></i>الملف الشخصي</a>
+        <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+        <a href="favorites.html"><i class="fas fa-heart"></i><span>المفضلة</span></a>
+        <a href="recent.html"><i class="fas fa-history"></i><span>آخر الزيارات</span></a>
+        <a href="settings.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
     </div>
 
     <script>
-        document.getElementById('menu-btn').addEventListener('click', function() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.style.transform = sidebar.style.transform === 'translateX(0px)' ? 'translateX(100%)' : 'translateX(0)';
-        });
-
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const searchBtn = document.getElementById('search-btn');
         const searchContainer = document.getElementById('search-container');
+        const closeSearch = document.getElementById('close-search');
         const searchInput = document.getElementById('search-input');
         const searchResult = document.getElementById('search-result');
+        const categories = document.querySelectorAll('.category');
 
-        document.getElementById('search-btn').addEventListener('click', function() {
+        menuBtn.addEventListener('click', function () {
+            sidebar.style.transform = 'translateX(0)';
+            toolbar.style.display = 'none';
+        });
+
+        searchBtn.addEventListener('click', () => {
             searchContainer.classList.add('active');
             searchInput.focus();
         });
 
-        document.getElementById('close-search').addEventListener('click', function() {
+        closeSearch.addEventListener('click', () => {
             searchContainer.classList.remove('active');
-            searchInput.value = '';
-            searchResult.style.display = 'none';
-            showAllCategories();
         });
 
-        searchInput.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                const searchTerm = this.value.toLowerCase();
-                const categories = document.querySelectorAll('.category');
-                let foundCategory = null;
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+            searchResult.innerHTML = '';
 
-                categories.forEach(category => {
-                    const categoryName = category.getAttribute('data-category').toLowerCase();
-                    if (categoryName === searchTerm) {
-                        foundCategory = category.cloneNode(true);
-                    }
-                });
-
-                if (foundCategory) {
-                    searchResult.innerHTML = '';
-                    searchResult.appendChild(foundCategory);
-                    searchResult.style.display = 'block';
-                    searchContainer.classList.remove('active');
-                } else {
-                    alert('لم يتم العثور على الفئة المطلوبة');
-                }
-            } else {
-                const searchTerm = this.value.toLowerCase();
-                const categories = document.querySelectorAll('.category');
-                categories.forEach(category => {
-                    const categoryName = category.getAttribute('data-category').toLowerCase();
-                    if (categoryName.includes(searchTerm)) {
-                        category.style.display = 'flex';
-                    } else {
-                        category.style.display = 'none';
-                    }
-                });
-            }
-        });
-
-        function showAllCategories() {
-            const categories = document.querySelectorAll('.category');
             categories.forEach(category => {
-                category.style.display = 'flex';
+                const categoryName = category.dataset.category.toLowerCase();
+                if (categoryName.includes(query)) {
+                    searchResult.style.display = 'block';
+                    const clone = category.cloneNode(true);
+                    searchResult.appendChild(clone);
+                }
             });
-        }
 
-        document.addEventListener('click', function(event) {
-            if (!searchResult.contains(event.target) && event.target !== searchInput) {
+            if (query === '') {
                 searchResult.style.display = 'none';
-                showAllCategories();
             }
-        });
-        
-        // إضافة مستمع حدث للنقرات على الصفحة
-        document.addEventListener('click', function(event) {
-            // إذا كانت القائمة الجانبية مفتوحة وتم النقر خارجها
-            if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && event.target !== menuBtn) {
-                sidebar.classList.remove('active');
-            }
-        });
-
-        // إضافة مستمع حدث للروابط في القائمة الجانبية
-        const sidebarLinks = sidebar.querySelectorAll('a');
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                sidebar.classList.remove('active');
-            });
-        });
-
-
-        // تفعيل أزرار شريط الأدوات السفلي
-        document.getElementById('home-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('تم النقر على زر الرئيسية');
-        });
-
-        document.getElementById('categories-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('تم النقر على زر الفئات');
-        });
-
-        document.getElementById('favorites-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('تم النقر على زر المفضلة');
-        });
-
-        document.getElementById('profile-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('تم النقر على زر الملف الشخصي');
         });
     </script>
 </body>
