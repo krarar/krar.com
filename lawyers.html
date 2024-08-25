@@ -109,9 +109,22 @@
             height: 200px;
             object-fit: cover;
             border-radius: 10px;
+            box-shadow: 0 4px 10px var(--image-shadow);
         }
 
         .lawyer-name {
+            position: absolute;
+            bottom: 40px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .lawyer-address {
             position: absolute;
             bottom: 10px;
             left: 10px;
@@ -121,6 +134,7 @@
             padding: 5px 10px;
             border-radius: 5px;
             text-align: center;
+            font-size: 12px;
         }
 
         .modal {
@@ -143,6 +157,7 @@
             width: 80%;
             max-width: 500px;
             border-radius: 10px;
+            position: relative;
         }
 
         .close {
@@ -150,13 +165,13 @@
             float: left;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
         }
 
         .close:hover,
         .close:focus {
             color: black;
             text-decoration: none;
-            cursor: pointer;
         }
 
         .modal-image {
@@ -165,6 +180,30 @@
             object-fit: cover;
             border-radius: 10px;
             margin-bottom: 15px;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content p {
+            margin: 5px 0;
+        }
+
+        .modal-links {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .modal-links a {
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .modal-links i {
+            font-size: 24px;
+            margin: 0 5px;
         }
 
         .form-container {
@@ -179,7 +218,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             z-index: 1001;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
         }
 
         .form-container form {
@@ -209,6 +248,18 @@
 
         .form-container form button:hover {
             background-color: var(--secondary-color);
+        }
+
+        #cancel-button {
+            background-color: var(--card-color);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            margin-top: 5px;
+        }
+
+        #cancel-button:hover {
+            background-color: var(--text-color);
+            color: var(--card-color);
         }
 
         #search-container {
@@ -273,6 +324,21 @@
             z-index: 1001;
         }
 
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        .close-sidebar-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
         #sidebar nav ul {
             list-style: none;
             padding: 0;
@@ -296,6 +362,32 @@
             font-size: 20px;
             color: var(--primary-color);
         }
+
+        #filter-section {
+            background-color: var(--card-color);
+            padding: 15px;
+            margin: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #filter-type {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        #filter-input {
+            width: 65%;
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            font-family: 'Tajawal', sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -306,8 +398,16 @@
             <button id="search-btn"><i class="fas fa-search"></i></button>
         </div>
     </header>
+    <div id="filter-section">
+        <select id="filter-type">
+            <option value="name">الاسم</option>
+            <option value="address">العنوان</option>
+        </select>
+        <input type="text" id="filter-input" placeholder="أدخل كلمة البحث...">
+    </div>
 
     <aside id="sidebar">
+        <button id="close-sidebar" class="close-sidebar-button"><i class="fas fa-times"></i></button>
         <nav>
             <ul>
                 <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
@@ -336,10 +436,15 @@
     <div id="form-container" class="form-container">
         <form id="lawyer-form">
             <input type="text" id="name" name="name" placeholder="اسم المحامي" required>
+            <input type="text" id="address" name="address" placeholder="عنوان المحامي" required>
             <input type="tel" id="phone" name="phone" placeholder="رقم الهاتف" required>
             <textarea id="description" name="description" placeholder="وصف قصير" required></textarea>
+            <input type="text" id="whatsapp" name="whatsapp" placeholder="رقم الواتساب (بدون +)" required>
+            <input type="url" id="facebook" name="facebook" placeholder="رابط الفيسبوك" required>
+            <input type="url" id="instagram" name="instagram" placeholder="رابط الإنستقرام" required>
             <input type="file" id="image" name="image" accept="image/*" required>
             <button type="submit">إضافة المحامي</button>
+            <button type="button" id="cancel-button">إلغاء</button>
         </form>
     </div>
 
@@ -348,154 +453,215 @@
             <span class="close">&times;</span>
             <img class="modal-image" src="" alt="صورة المحامي">
             <h2 id="modal-name"></h2>
-            <p id="modal-description"></p>
+            <p id="modal-address"></p>
             <p id="modal-phone"></p>
+            <p id="modal-description"></p>
+            <div class="modal-links">
+                <a id="modal-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a id="modal-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a id="modal-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuBtn = document.getElementById('menu-btn');
-            const searchBtn = document.getElementById('search-btn');
-            const closeSearchBtn = document.getElementById('close-search');
-            const sidebar = document.getElementById('sidebar');
-            const searchContainer = document.getElementById('search-container');
-            const searchInput = document.getElementById('search-input');
-            const formContainer = document.getElementById('form-container');
-            const addLawyerBtn = document.getElementById('add-lawyer-btn');
-            const lawyerForm = document.getElementById('lawyer-form');
-            const lawyersList = document.getElementById('lawyers-list');
-            const toolbar = document.querySelector('header');
-            const modal = document.getElementById('lawyer-modal');
-            const closeModal = document.getElementsByClassName('close')[0];
-            let lawyers = [];
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
-            // دالة لفتح القائمة الجانبية
-            function openSidebar() {
-                sidebar.style.transform = 'translateX(0)';
-                toolbar.style.display = 'none';
-            }
+<script>
+    // تهيئة Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+        authDomain: "messageemeapp.firebaseapp.com",
+        databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+        projectId: "messageemeapp",
+        storageBucket: "messageemeapp.appspot.com",
+        messagingSenderId: "278680662267",
+        appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+    };
 
-            // دالة لإغلاق القائمة الجانبية
-            function closeSidebar() {
-                sidebar.style.transform = 'translateX(100%)';
-                toolbar.style.display = 'flex';
-            }
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-            // دالة لفتح نافذة البحث
-            function openSearch() {
-                searchContainer.classList.add('active');
-            }
+    // Get a reference to the database and storage services
+    const db = firebase.firestore();
+    const storage = firebase.storage();
 
-            // دالة لإغلاق نافذة البحث
-            function closeSearch() {
-                searchContainer.classList.remove('active');
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuBtn = document.getElementById('menu-btn');
+        const searchBtn = document.getElementById('search-btn');
+        const closeSearchBtn = document.getElementById('close-search');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+        const searchContainer = document.getElementById('search-container');
+        const searchInput = document.getElementById('search-input');
+        const formContainer = document.getElementById('form-container');
+        const addLawyerBtn = document.getElementById('add-lawyer-btn');
+        const lawyerForm = document.getElementById('lawyer-form');
+        const lawyersList = document.getElementById('lawyers-list');
+        const modal = document.getElementById('lawyer-modal');
+        const closeModal = document.getElementsByClassName('close')[0];
+        const cancelButton = document.getElementById('cancel-button');
+        const filterType = document.getElementById('filter-type');
+        const filterInput = document.getElementById('filter-input');
+        let lawyers = [];
 
-            // دالة لفتح نموذج إضافة محامي
-            function openAddLawyerForm() {
-                formContainer.style.display = 'block';
-            }
+        function openSidebar() {
+            sidebar.classList.add('active');
+        }
 
-            // دالة لإغلاق نموذج إضافة محامي
-            function closeAddLawyerForm() {
-                formContainer.style.display = 'none';
-            }
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+        }
 
-            // دالة لعرض المحامين
-            function displayLawyers(lawyersArray) {
-                lawyersList.innerHTML = '';
-                lawyersArray.forEach(lawyer => {
-                    const card = document.createElement('div');
-                    card.classList.add('lawyer-card');
-                    card.innerHTML = `
-                        <img src="${lawyer.image}" alt="${lawyer.name}">
-                        <div class="lawyer-name">${lawyer.name}</div>
-                    `;
-                    card.addEventListener('click', () => showLawyerDetails(lawyer));
-                    lawyersList.appendChild(card);
-                });
-            }
+        function openSearch() {
+            searchContainer.classList.add('active');
+            searchInput.focus();
+        }
 
-            // دالة لعرض تفاصيل المحامي
-            function showLawyerDetails(lawyer) {
-                document.querySelector('.modal-image').src = lawyer.image;
-                document.getElementById('modal-name').textContent = lawyer.name;
-                document.getElementById('modal-description').textContent = lawyer.description;
-                document.getElementById('modal-phone').textContent = `الهاتف: ${lawyer.phone}`;
-                modal.style.display = 'block';
-            }
+        function closeSearch() {
+            searchContainer.classList.remove('active');
+            searchInput.value = '';
+        }
 
-            // إضافة المستمعين للأحداث
-            menuBtn.addEventListener('click', openSidebar);
-            searchBtn.addEventListener('click', openSearch);
-            closeSearchBtn.addEventListener('click', closeSearch);
-            addLawyerBtn.addEventListener('click', openAddLawyerForm);
+        function openAddLawyerForm() {
+            formContainer.style.display = 'block';
+        }
 
-            closeModal.onclick = function() {
+        function closeAddLawyerForm() {
+            formContainer.style.display = 'none';
+            lawyerForm.reset();
+        }
+
+        function displayLawyers(lawyersArray) {
+            lawyersList.innerHTML = '';
+            lawyersArray.forEach(lawyer => {
+                const card = document.createElement('div');
+                card.classList.add('lawyer-card');
+                card.innerHTML = `
+                    <img src="${lawyer.image}" alt="${lawyer.name}">
+                    <div class="lawyer-name">${lawyer.name}</div>
+                    <div class="lawyer-address">${lawyer.address}</div>
+                `;
+                card.addEventListener('click', () => showLawyerDetails(lawyer));
+                lawyersList.appendChild(card);
+            });
+        }
+
+        function showLawyerDetails(lawyer) {
+            window.location.href = `lawyer-details.html?id=${lawyer.id}`;
+        }
+
+        menuBtn.addEventListener('click', openSidebar);
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+        searchBtn.addEventListener('click', openSearch);
+        closeSearchBtn.addEventListener('click', closeSearch);
+        addLawyerBtn.addEventListener('click', openAddLawyerForm);
+        cancelButton.addEventListener('click', closeAddLawyerForm);
+
+        closeModal.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
                 modal.style.display = 'none';
             }
-
-          window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = 'none';
-                }
-                if (event.target == formContainer) {
-                    closeAddLawyerForm();
-                }
+            if (event.target == formContainer) {
+                closeAddLawyerForm();
             }
+        }
 
-            sidebar.addEventListener('click', function (event) {
-                if (event.target === sidebar) {
-                    closeSidebar();
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeSearch();
+                closeSidebar();
+                modal.style.display = 'none';
+                closeAddLawyerForm();
+            }
+        });
+
+        function filterLawyers() {
+            const filterValue = filterInput.value.toLowerCase().trim();
+            console.log("Filter type:", filterType.value);
+            console.log("Filter value:", filterValue);
+            const filteredLawyers = lawyers.filter(lawyer => {
+                if (filterType.value === 'name') {
+                    return lawyer.name.toLowerCase().includes(filterValue);
+                } else if (filterType.value === 'address') {
+                    console.log("Checking address:", lawyer.address.toLowerCase(), "includes", filterValue);
+                    return lawyer.address.toLowerCase().includes(filterValue);
                 }
+                return false;
             });
+            console.log("Filtered lawyers:", filteredLawyers);
+            displayLawyers(filteredLawyers);
+        }
 
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape') {
-                    closeSearch();
-                    closeSidebar();
-                    modal.style.display = 'none';
-                }
-            });
+        filterInput.addEventListener('input', filterLawyers);
+        filterType.addEventListener('change', filterLawyers);
 
-            // البحث في قائمة المحامين
-            searchInput.addEventListener('input', function () {
-                const searchTerm = searchInput.value.toLowerCase();
-                const filteredLawyers = lawyers.filter(lawyer => 
-                    lawyer.name.toLowerCase().includes(searchTerm) ||
-                    lawyer.description.toLowerCase().includes(searchTerm)
-                );
-                displayLawyers(filteredLawyers);
-            });
+        lawyerForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(lawyerForm);
+            const lawyerData = {
+                name: formData.get('name'),
+                address: formData.get('address'),
+                phone: formData.get('phone'),
+                description: formData.get('description'),
+                imageFile: formData.get('image'),
+                whatsapp: formData.get('whatsapp'),
+                facebook: formData.get('facebook'),
+                instagram: formData.get('instagram')
+            };
 
-            // إضافة محامي جديد
-            lawyerForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const formData = new FormData(lawyerForm);
-                const lawyer = {
-                    id: Date.now(),
-                    name: formData.get('name'),
-                    phone: formData.get('phone'),
-                    description: formData.get('description'),
-                    image: URL.createObjectURL(formData.get('image'))
-                };
-                lawyers.push(lawyer);
-                displayLawyers(lawyers);
+              const imageRef = storage.ref().child(`lawyer_images/${Date.now()}_${lawyerData.imageFile.name}`);
+            imageRef.put(lawyerData.imageFile).then(snapshot => {
+                return snapshot.ref.getDownloadURL();
+            }).then(downloadURL => {
+                return db.collection('lawyers').add({
+                    name: lawyerData.name,
+                    address: lawyerData.address,
+                    phone: lawyerData.phone,
+                    description: lawyerData.description,
+                    image: downloadURL,
+                    whatsapp: lawyerData.whatsapp,
+                    facebook: lawyerData.facebook,
+                    instagram: lawyerData.instagram
+                });
+            }).then(docRef => {
+                console.log("Document written with ID: ", docRef.id);
                 lawyerForm.reset();
                 closeAddLawyerForm();
+                loadLawyersFromDB();
+            }).catch(error => {
+                console.error("Error adding document: ", error);
             });
-
-            // عرض المحامين الافتراضيين (يمكن استبدال هذا بطلب API في تطبيق حقيقي)
-            const defaultLawyers = [
-                { id: 1, name: "أحمد محمد", phone: "0123456789", description: "محامي متخصص في القانون المدني", image: "https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ad_images%2F1000087777.jpg?alt=media&token=1cf641e0-f24d-431f-9d00-c6942b85b6f4" },
-                { id: 2, name: "سارة علي", phone: "0987654321", description: "محامية متخصصة في قانون الأسرة", image: "https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ad_images%2F1000087777.jpg?alt=media&token=1cf641e0-f24d-431f-9d00-c6942b85b6f4" },
-                { id: 3, name: "محمود خالد", phone: "0111222333", description: "محامي متخصص في القانون التجاري", image: "https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ad_images%2F1000087777.jpg?alt=media&token=1cf641e0-f24d-431f-9d00-c6942b85b6f4" }
-            ];
-
-            lawyers = defaultLawyers;
-            displayLawyers(lawyers);
         });
-    </script>
+
+        function loadLawyersFromDB() {
+            db.collection('lawyers').get().then(querySnapshot => {
+                lawyers = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    name: doc.data().name,
+                    address: doc.data().address,
+                    phone: doc.data().phone,
+                    description: doc.data().description,
+                    image: doc.data().image,
+                    whatsapp: doc.data().whatsapp,
+                    facebook: doc.data().facebook,
+                    instagram: doc.data().instagram
+                }));
+                displayLawyers(lawyers);
+                console.log("Loaded lawyers:", lawyers);
+            }).catch(error => {
+                console.error("Error loading lawyers:", error);
+            });
+        }
+
+        loadLawyersFromDB();
+    });
+</script>
 </body>
 </html>
