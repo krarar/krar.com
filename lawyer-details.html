@@ -20,7 +20,8 @@
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
         }
         .lawyer-image {
             width: 100%;
@@ -32,54 +33,65 @@
         .lawyer-info h1 {
             margin-bottom: 10px;
             color: #3498db;
-            font-size: 28px;
+            font-size: 30px;
+            font-weight: 700;
         }
         .lawyer-info p {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             line-height: 1.6;
             color: #34495e;
             font-size: 18px;
         }
         .divider {
-            border-bottom: 1px solid #bdc3c7;
-            margin: 15px 0;
+            border-bottom: 2px solid #bdc3c7;
+            margin: 20px 0;
         }
         .social-links {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             margin-top: 20px;
         }
         .social-links a {
-            font-size: 24px;
+            font-size: 28px;
             color: #3498db;
-            transition: color 0.3s ease;
+            margin: 0 10px;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
         .social-links a:hover {
             color: #2980b9;
+            transform: scale(1.1);
         }
         .button-container {
             display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
         }
         .back-button,
         .booking-button {
             display: inline-block;
-            padding: 10px 20px;
-            background-color: #3498db;
+            padding: 12px 25px;
+            border-radius: 8px;
             color: #fff;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 10px;
         }
-        .back-button:hover,
-        .booking-button:hover {
+        .back-button {
+            background-color: #3498db;
+        }
+        .back-button:hover {
             background-color: #2980b9;
+            transform: scale(1.05);
         }
         .booking-button {
-            margin-top: 20px;
-            display: block;
-            text-align: center;
+            background-color: #e67e22;
+        }
+        .booking-button:hover {
+            background-color: #d35400;
+            transform: scale(1.05);
         }
     </style>
 </head>
