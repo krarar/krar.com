@@ -31,25 +31,23 @@
         }
         .lawyer-info h1 {
             margin-bottom: 10px;
-            font-size: 28px;
             color: #3498db;
+            font-size: 28px;
         }
         .lawyer-info p {
-            margin-bottom: 15px;
-            font-size: 18px;
-            color: #2c3e50;
+            margin-bottom: 10px;
             line-height: 1.6;
+            color: #34495e;
+            font-size: 18px;
         }
-        .lawyer-info p.details {
-            font-weight: bold;
-            color: #000;
+        .divider {
+            border-bottom: 1px solid #bdc3c7;
+            margin: 15px 0;
         }
         .social-links {
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #ddd;
         }
         .social-links a {
             font-size: 24px;
@@ -59,30 +57,24 @@
         .social-links a:hover {
             color: #2980b9;
         }
-        .buttons-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .back-button, .book-button {
+        .back-button,
+        .booking-button {
             display: inline-block;
+            margin-top: 20px;
             padding: 10px 20px;
+            background-color: #3498db;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
-        .back-button {
-            background-color: #3498db;
-        }
-        .back-button:hover {
+        .back-button:hover,
+        .booking-button:hover {
             background-color: #2980b9;
         }
-        .book-button {
-            background-color: #e74c3c;
-        }
-        .book-button:hover {
-            background-color: #c0392b;
+        .button-container {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -91,8 +83,11 @@
         <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
         <div class="lawyer-info">
             <h1 id="lawyer-name"></h1>
-            <p id="lawyer-address" class="details"></p>
-            <p id="lawyer-phone" class="details"></p>
+            <div class="divider"></div>
+            <p id="lawyer-address"></p>
+            <div class="divider"></div>
+            <p id="lawyer-phone"></p>
+            <div class="divider"></div>
             <p id="lawyer-description"></p>
         </div>
         <div class="social-links">
@@ -100,13 +95,12 @@
             <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
             <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        <div class="buttons-container">
+        <div class="button-container">
             <a href="index.html" class="back-button">العودة إلى الصفحة الرئيسية</a>
-            <a href="booking.html" class="book-button">حجز موعد</a>
+            <a href="booking.html?id=lawyerId" class="booking-button">حجز</a>
         </div>
     </div>
 
-    <!-- Firebase Initialization and Data Retrieval -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     
@@ -126,6 +120,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const lawyerId = urlParams.get('id');
+            const bookingButton = document.querySelector('.booking-button');
 
             if (lawyerId) {
                 db.collection('lawyers').doc(lawyerId).get().then(doc => {
@@ -149,6 +144,8 @@
                         instagramLink.href = lawyer.instagram;
                         instagramLink.title = `حساب ${lawyer.name} على إنستغرام`;
 
+                        // Update booking button link with lawyerId
+                        bookingButton.href = `booking.html?id=${lawyerId}`;
                     } else {
                         console.log("لا يوجد محامي بهذا المعرف");
                         document.querySelector('.lawyer-details').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
