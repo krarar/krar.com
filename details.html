@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المحامي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* أضف نفس الأنماط من الصفحة الرئيسية هنا */
+        /* يمكنك إضافة أنماط إضافية خاصة بصفحة التفاصيل */
+        .lawyer-details {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .lawyer-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .lawyer-info h1 {
+            margin-bottom: 10px;
+        }
+        .lawyer-info p {
+            margin-bottom: 5px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .social-links a {
+            font-size: 24px;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="lawyer-details">
+        <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
+        <div class="lawyer-info">
+            <h1 id="lawyer-name"></h1>
+            <p id="lawyer-address"></p>
+            <p id="lawyer-phone"></p>
+            <p id="lawyer-description"></p>
+        </div>
+        <div class="social-links">
+            <a id="lawyer-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script>
+        // تهيئة Firebase (استخدم نفس التكوين من الصفحة الرئيسية)
+        const firebaseConfig = {
+            // أضف تكوين Firebase الخاص بك هنا
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lawyerId = urlParams.get('id');
+
+            if (lawyerId) {
+                db.collection('lawyers').doc(lawyerId).get().then(doc => {
+                    if (doc.exists) {
+                        const lawyer = doc.data();
+                        document.getElementById('lawyer-image').src = lawyer.image;
+                        document.getElementById('lawyer-name').textContent = lawyer.name;
+                        document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
+                        document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
+                        document.getElementById('lawyer-description').textContent = lawyer.description;
+                        document.getElementById('lawyer-whatsapp').href = `https://wa.me/${lawyer.whatsapp}`;
+                        document.getElementById('lawyer-facebook').href = lawyer.facebook;
+                        document.getElementById('lawyer-instagram').href = lawyer.instagram;
+                    } else {
+                        console.log("لا يوجد محامي بهذا المعرف");
+                    }
+                }).catch(error => {
+                    console.error("Error getting lawyer details:", error);
+                });
+            } else {
+                console.log("لم يتم تحديد معرف المحامي");
+            }
+        });
+    </script>
+</body>
+</html>
