@@ -57,10 +57,14 @@
         .social-links a:hover {
             color: #2980b9;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
         .back-button,
         .booking-button {
             display: inline-block;
-            margin-top: 20px;
             padding: 10px 20px;
             background-color: #3498db;
             color: #fff;
@@ -72,10 +76,10 @@
         .booking-button:hover {
             background-color: #2980b9;
         }
-        .button-container {
-            display: flex;
-            justify-content: space-between; /* وضع الأزرار بجانب بعضها */
-            gap: 10px; /* إضافة مسافة بين الأزرار */
+        .booking-button {
+            margin-top: 20px;
+            display: block;
+            text-align: center;
         }
     </style>
 </head>
@@ -98,7 +102,7 @@
         </div>
         <div class="button-container">
             <a href="index.html" class="back-button">العودة إلى الصفحة الرئيسية</a>
-            <a href="booking.html?id=lawyerId" class="booking-button">حجز</a>
+            <a id="booking-button" href="#" class="booking-button">حجز</a>
         </div>
     </div>
 
@@ -121,7 +125,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const lawyerId = urlParams.get('id');
-            const bookingButton = document.querySelector('.booking-button');
+            const bookingButton = document.getElementById('booking-button');
 
             if (lawyerId) {
                 db.collection('lawyers').doc(lawyerId).get().then(doc => {
