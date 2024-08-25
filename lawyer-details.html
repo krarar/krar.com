@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* تحديث الأنماط لتتناسب مع الواجهة الرئيسية */
+        /* تحديث الأنماط لتناسب متطلبات المستخدم */
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f4f6f9;
@@ -34,18 +34,28 @@
             max-height: 300px;
             object-fit: cover;
             border-radius: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .lawyer-info h1 {
-            margin-bottom: 10px;
-            font-size: 24px;
+            margin-bottom: 15px;
+            font-size: 26px;
             color: #3498db;
         }
         .lawyer-info p {
-            margin-bottom: 10px;
-            font-size: 16px;
-            line-height: 1.6;
-            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #2c3e50;
+            line-height: 1.8;
+        }
+        .lawyer-info p span {
+            font-weight: bold;
+            color: #000;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #dcdcdc;
+            margin: 20px 0;
         }
         .social-links {
             display: flex;
@@ -77,10 +87,10 @@
         /* تحسينات على توافق الشاشات المختلفة */
         @media (max-width: 768px) {
             .lawyer-info h1 {
-                font-size: 20px;
+                font-size: 22px;
             }
             .lawyer-info p {
-                font-size: 14px;
+                font-size: 16px;
             }
             .social-links a {
                 font-size: 18px;
@@ -93,9 +103,12 @@
         <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
         <div class="lawyer-info">
             <h1 id="lawyer-name"></h1>
-            <p id="lawyer-address"></p>
-            <p id="lawyer-phone"></p>
-            <p id="lawyer-description"></p>
+            <hr>
+            <p id="lawyer-address"><span>العنوان:</span> </p>
+            <hr>
+            <p id="lawyer-phone"><span>الهاتف:</span> </p>
+            <hr>
+            <p id="lawyer-description"><span>الوصف:</span> </p>
         </div>
         <div class="social-links">
             <a id="lawyer-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -132,9 +145,9 @@
                         const lawyer = doc.data();
                         document.getElementById('lawyer-image').src = lawyer.image;
                         document.getElementById('lawyer-name').textContent = lawyer.name;
-                        document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
-                        document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
-                        document.getElementById('lawyer-description').textContent = lawyer.description;
+                        document.getElementById('lawyer-address').innerHTML = `<span>العنوان:</span> ${lawyer.address}`;
+                        document.getElementById('lawyer-phone').innerHTML = `<span>الهاتف:</span> ${lawyer.phone}`;
+                        document.getElementById('lawyer-description').innerHTML = `<span>الوصف:</span> ${lawyer.description}`;
                         
                         const whatsappLink = document.getElementById('lawyer-whatsapp');
                         whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
