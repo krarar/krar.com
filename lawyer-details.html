@@ -192,9 +192,6 @@
                                 lawyerId: lawyerId,
                                 lawyerName: lawyer.name,
                                 lawyerImage: lawyer.image,
-                                lawyerAddress: lawyer.address,
-                                lawyerPhone: lawyer.phone,
-                                lawyerDescription: lawyer.description,
                                 userName: userName,
                                 userAddress: userAddress,
                                 userPhone: userPhone,
@@ -204,7 +201,6 @@
                                 alert('تم إرسال الحجز بنجاح!');
                             }).catch(error => {
                                 console.error("خطأ في إرسال الحجز:", error);
-                                alert('حدث خطأ أثناء إرسال الحجز. يرجى المحاولة مرة أخرى لاحقاً.');
                             });
                         });
                     } else {
@@ -213,7 +209,7 @@
                     }
                 }).catch(error => {
                     console.error("خطأ في استرجاع بيانات المحامي:", error);
-                    document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات: ' + error.message + '</p>';
+                    document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
                 });
             } else {
                 console.log("لم يتم تحديد معرف المحامي");
