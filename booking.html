@@ -72,6 +72,7 @@
             <input type="hidden" id="lawyer-address" name="lawyerAddress">
             <input type="hidden" id="lawyer-phone" name="lawyerPhone">
             <input type="hidden" id="lawyer-description" name="lawyerDescription">
+            <input type="hidden" id="lawyer-image" name="lawyerImage">
 
             <div class="form-group">
                 <label for="user-name">اسمك</label>
@@ -116,6 +117,7 @@
             const lawyerAddress = urlParams.get('address');
             const lawyerPhone = urlParams.get('phone');
             const lawyerDescription = urlParams.get('description');
+            const lawyerImage = urlParams.get('image');
 
             if (lawyerId) {
                 document.getElementById('lawyer-id').value = lawyerId;
@@ -123,6 +125,7 @@
                 document.getElementById('lawyer-address').value = lawyerAddress;
                 document.getElementById('lawyer-phone').value = lawyerPhone;
                 document.getElementById('lawyer-description').value = lawyerDescription;
+                document.getElementById('lawyer-image').value = lawyerImage;
             } else {
                 alert("لم يتم تحديد المحامي. يرجى العودة واختيار محامي من القائمة.");
                 window.location.href = "index.html";
@@ -139,6 +142,7 @@
                 lawyerAddress: formData.get('lawyerAddress'),
                 lawyerPhone: formData.get('lawyerPhone'),
                 lawyerDescription: formData.get('lawyerDescription'),
+                lawyerImage: formData.get('lawyerImage'),
                 userName: formData.get('userName'),
                 userAddress: formData.get('userAddress'),
                 userPhone: formData.get('userPhone'),
