@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز موعد</title>
+    <title>صفحة الحجز</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
@@ -14,87 +15,87 @@
             padding: 20px;
         }
         .booking-form {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .booking-form h1 {
+            margin-bottom: 20px;
             color: #3498db;
-            font-size: 24px;
+            font-size: 30px;
+        }
+        .form-group {
             margin-bottom: 20px;
         }
-        .booking-form label {
-            font-size: 18px;
-            margin-bottom: 10px;
+        .form-group label {
             display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
         }
-        .booking-form input,
-        .booking-form textarea {
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
             border: 1px solid #bdc3c7;
             border-radius: 5px;
             font-size: 16px;
         }
-        .booking-form button {
-            width: 100%;
-            padding: 10px;
-            background-color: #3498db;
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .submit-button {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
             color: #fff;
-            border: none;
-            border-radius: 5px;
+            background-color: #e67e22;
             font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
-        .booking-form button:hover {
-            background-color: #2980b9;
-        }
-        .message {
-            margin-top: 20px;
-            padding: 10px;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            display: none;
-        }
-        .message.success {
-            background-color: #2ecc71;
-        }
-        .message.error {
-            background-color: #e74c3c;
+        .submit-button:hover {
+            background-color: #d35400;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
     <div class="booking-form">
-        <h1>حجز موعد</h1>
-        <form id="bookingForm">
-            <label for="user-name">الاسم الكامل:</label>
-            <input type="text" id="user-name" name="user-name" required>
-            
-            <label for="user-address">العنوان:</label>
-            <input type="text" id="user-address" name="user-address" required>
-            
-            <label for="user-phone">رقم الهاتف:</label>
-            <input type="text" id="user-phone" name="user-phone" required>
-            
-            <label for="booking-details">تفاصيل الحجز:</label>
-            <textarea id="booking-details" name="booking-details" rows="4" required></textarea>
-            
-            <button type="submit">حجز</button>
+        <h1>طلب حجز</h1>
+        <form id="booking-form">
+            <input type="hidden" id="lawyer-id" name="lawyerId">
+            <input type="hidden" id="lawyer-name" name="lawyerName">
+            <input type="hidden" id="lawyer-address" name="lawyerAddress">
+            <input type="hidden" id="lawyer-phone" name="lawyerPhone">
+            <input type="hidden" id="lawyer-description" name="lawyerDescription">
+
+            <div class="form-group">
+                <label for="user-name">اسمك</label>
+                <input type="text" id="user-name" name="userName" required>
+            </div>
+            <div class="form-group">
+                <label for="user-address">عنوانك</label>
+                <input type="text" id="user-address" name="userAddress" required>
+            </div>
+            <div class="form-group">
+                <label for="user-phone">رقم هاتفك</label>
+                <input type="text" id="user-phone" name="userPhone" required>
+            </div>
+            <div class="form-group">
+                <label for="booking-details">تفاصيل الحجز</label>
+                <textarea id="booking-details" name="bookingDetails" required></textarea>
+            </div>
+            <button type="submit" class="submit-button">إرسال الطلب</button>
         </form>
-        <div class="message success">تم إرسال طلب الحجز بنجاح!</div>
-        <div class="message error">حدث خطأ أثناء إرسال طلب الحجز.</div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
@@ -108,34 +109,53 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
+        document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const lawyerId = urlParams.get('id');
-            const userName = document.getElementById('user-name').value;
-            const userAddress = document.getElementById('user-address').value;
-            const userPhone = document.getElementById('user-phone').value;
-            const bookingDetails = document.getElementById('booking-details').value;
+            const lawyerName = urlParams.get('name');
+            const lawyerAddress = urlParams.get('address');
+            const lawyerPhone = urlParams.get('phone');
+            const lawyerDescription = urlParams.get('description');
 
-            db.collection('bookings').add({
-                lawyerId: lawyerId,
-                userName: userName,
-                userAddress: userAddress,
-                userPhone: userPhone,
-                bookingDetails: bookingDetails,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                document.querySelector('.message.success').style.display = 'block';
-                document.querySelector('.message.error').style.display = 'none';
-                document.getElementById('bookingForm').reset();
-            }).catch((error) => {
-                console.error("Error adding booking: ", error);
-                document.querySelector('.message.success').style.display = 'none';
-                document.querySelector('.message.error').style.display = 'block';
-            });
+            if (lawyerId) {
+                document.getElementById('lawyer-id').value = lawyerId;
+                document.getElementById('lawyer-name').value = lawyerName;
+                document.getElementById('lawyer-address').value = lawyerAddress;
+                document.getElementById('lawyer-phone').value = lawyerPhone;
+                document.getElementById('lawyer-description').value = lawyerDescription;
+            } else {
+                alert("لم يتم تحديد المحامي. يرجى العودة واختيار محامي من القائمة.");
+                window.location.href = "index.html";
+            }
+        });
+
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const bookingData = {
+                lawyerId: formData.get('lawyerId'),
+                lawyerName: formData.get('lawyerName'),
+                lawyerAddress: formData.get('lawyerAddress'),
+                lawyerPhone: formData.get('lawyerPhone'),
+                lawyerDescription: formData.get('lawyerDescription'),
+                userName: formData.get('userName'),
+                userAddress: formData.get('userAddress'),
+                userPhone: formData.get('userPhone'),
+                bookingDetails: formData.get('bookingDetails'),
+                timestamp: new Date()
+            };
+
+            db.collection('bookings').add(bookingData)
+                .then(() => {
+                    alert("تم إرسال طلب الحجز بنجاح.");
+                    window.location.href = "index.html";
+                })
+                .catch(error => {
+                    console.error("خطأ في إرسال طلب الحجز:", error);
+                    alert("حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
+                });
         });
     </script>
 </body>
-  </html>
-  
+</html>
