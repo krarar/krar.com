@@ -6,7 +6,7 @@
     <title>تفاصيل المحامي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+  <style>
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f7f9fc;
@@ -130,22 +130,10 @@
         <!-- مربع المستخدم -->
         <div class="box">
             <div class="info-title">بيانات المستخدم</div>
-            <div class="info-item">
-                <label for="user-name">الاسم</label>
-                <input type="text" id="user-name" placeholder="أدخل اسمك">
-            </div>
-            <div class="info-item">
-                <label for="user-address">العنوان</label>
-                <input type="text" id="user-address" placeholder="أدخل عنوانك">
-            </div>
-            <div class="info-item">
-                <label for="user-phone">الهاتف</label>
-                <input type="text" id="user-phone" placeholder="أدخل رقم هاتفك">
-            </div>
-            <div class="info-item">
-                <label for="booking-details">تفاصيل الحجز</label>
-                <textarea id="booking-details" placeholder="أدخل تفاصيل الحجز"></textarea>
-            </div>
+            <div class="info-item">الاسم: <input type="text" id="user-name" placeholder="أدخل اسمك"></div>
+            <div class="info-item">العنوان: <input type="text" id="user-address" placeholder="أدخل عنوانك"></div>
+            <div class="info-item">الهاتف: <input type="text" id="user-phone" placeholder="أدخل رقم هاتفك"></div>
+            <div class="info-item">تفاصيل الحجز: <textarea id="booking-details" placeholder="أدخل تفاصيل الحجز"></textarea></div>
         </div>
     </div>
 
@@ -156,13 +144,13 @@
     
     <script>
         const firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-            databaseURL: "YOUR_FIREBASE_DATABASE_URL",
-            projectId: "YOUR_FIREBASE_PROJECT_ID",
-            storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
-            appId: "YOUR_FIREBASE_APP_ID"
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
