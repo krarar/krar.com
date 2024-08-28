@@ -7,25 +7,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --background-color: #f0f3f6;
-            --text-color: #2c3e50;
-            --card-color: #ffffff;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --image-shadow: rgba(0, 0, 0, 0.2);
-        }
+     :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #f0f3f6;
+    --text-color: #2c3e50;
+    --card-color: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --image-shadow: rgba(0, 0, 0, 0.2);
+    --modal-background: #ffffff;
+    --modal-border: #dbdbdb;
+    --modal-shadow: rgba(0, 0, 0, 0.15);
+}
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            padding-bottom: 60px;
-        }
+       body {
+    font-family: 'Tajawal', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding-bottom: 60px;
+}
 
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -388,6 +391,140 @@
             border-radius: 5px;
             font-family: 'Tajawal', sans-serif;
         }
+.message-icon {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    z-index: 1000;
+}
+#messageModal {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 50px;
+            width: 250px;
+            height: 450px;
+            background-color: #FFFFFF;
+            border-radius: 35px;
+            box-shadow: 0 5px 2px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+        .modal-content {
+            width: 80%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px;
+            border-bottom: 1px solid #DBDBDB;
+        }
+        .header h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #262626;
+        }
+
+        .header button {
+            background: none;
+            border: none;
+            color: #262626;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .message p {
+            margin: 0;
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 70%;
+            font-size: 14px;
+            line-height: 18px;
+        }
+        .message.sent p {
+            background-color: #EEE;
+            color: #262626;
+            margin-left: auto;
+        }
+
+        .message.received p {
+            background-color: #FFFFFF;
+            color: #262626;
+            border: 1px solid #DBDBDB;
+        }
+
+        .message img {
+            max-width: 30%;
+            border-radius: 5px;
+        }
+        .message-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #DBDBDB;
+        }
+
+        .message-input textarea {
+            flex-grow: 1;
+            border: 1px solid #DBDBDB;
+            border-radius: 18px;
+            padding: 8px 12px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+        }
+        .message-input button {
+            background: none;
+            border: none;
+            color: #0095F6;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px 12px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+.file-label {
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .file-label svg {
+            width: 24px;
+            height: 24px;
+            fill: #262626;
+        }
+
     </style>
 </head>
 <body>
@@ -464,204 +601,322 @@
         </div>
     </div>
 
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <button class="message-icon" onclick="toggleModal()">✉️</button>
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="header">
+                <button onclick="toggleModal()">✖️</button>
+                <h2>الرسائل</h2>
+                <div></div>
+            </div>
+            <div class="messages" id="messagesContainer">
+                <!-- الرسائل ستظهر هنا -->
+            </div>
+            <div class="message-input">
+                <label for="fileInput" class="file-label">
+                    <svg aria-label="إضافة صورة أو ملف" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24">
+                        <path d="M6.549 5.013A1.557 1.557 0 1 0 8.106 6.57a1.557 1.557 0 0 0-1.557-1.557Z" fill-rule="evenodd"></path>
+                        <path d="m2 18.605 3.901-3.9a.908.908 0 0 1 1.284 0l2.807 2.806a.908.908 0 0 0 1.283 0l5.534-5.534a.908.908 0 0 1 1.283 0l3.905 3.905" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
+                        <path d="M18.44 2.004A3.56 3.56 0 0 1 22 5.564h0v12.873a3.56 3.56 0 0 1-3.56 3.56H5.568a3.56 3.56 0 0 1-3.56-3.56V5.563a3.56 3.56 0 0 1 3.56-3.56Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </label>
+                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)" />
+                <textarea id="messageInput" placeholder="أرسل رسالة..." rows="1"></textarea>
+                <button onclick="sendMessage()">إرسال</button>
+            </div>
+        </div>
+    </div>
 
-<script>
-    // تهيئة Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
-        authDomain: "messageemeapp.firebaseapp.com",
-        databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
-        projectId: "messageemeapp",
-        storageBucket: "messageemeapp.appspot.com",
-        messagingSenderId: "278680662267",
-        appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
-    };
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script>
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-    // Get a reference to the database and storage services
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+        let selectedFile = null;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const menuBtn = document.getElementById('menu-btn');
-        const searchBtn = document.getElementById('search-btn');
-        const closeSearchBtn = document.getElementById('close-search');
-        const sidebar = document.getElementById('sidebar');
-        const closeSidebarBtn = document.getElementById('close-sidebar');
-        const searchContainer = document.getElementById('search-container');
-        const searchInput = document.getElementById('search-input');
-        const formContainer = document.getElementById('form-container');
-        const addLawyerBtn = document.getElementById('add-lawyer-btn');
-        const lawyerForm = document.getElementById('lawyer-form');
-        const lawyersList = document.getElementById('lawyers-list');
-        const modal = document.getElementById('lawyer-modal');
-        const closeModal = document.getElementsByClassName('close')[0];
-        const cancelButton = document.getElementById('cancel-button');
-        const filterType = document.getElementById('filter-type');
-        const filterInput = document.getElementById('filter-input');
-        let lawyers = [];
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const searchBtn = document.getElementById('search-btn');
+            const closeSearchBtn = document.getElementById('close-search');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const searchContainer = document.getElementById('search-container');
+              const searchInput = document.getElementById('search-input');
+            const formContainer = document.getElementById('form-container');
+            const addLawyerBtn = document.getElementById('add-lawyer-btn');
+            const lawyerForm = document.getElementById('lawyer-form');
+            const lawyersList = document.getElementById('lawyers-list');
+            const modal = document.getElementById('lawyer-modal');
+            const closeModal = document.getElementsByClassName('close')[0];
+            const cancelButton = document.getElementById('cancel-button');
+            const filterType = document.getElementById('filter-type');
+            const filterInput = document.getElementById('filter-input');
+            let lawyers = [];
 
-        function openSidebar() {
-            sidebar.classList.add('active');
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove('active');
-        }
-
-        function openSearch() {
-            searchContainer.classList.add('active');
-            searchInput.focus();
-        }
-
-        function closeSearch() {
-            searchContainer.classList.remove('active');
-            searchInput.value = '';
-        }
-
-        function openAddLawyerForm() {
-            formContainer.style.display = 'block';
-        }
-
-        function closeAddLawyerForm() {
-            formContainer.style.display = 'none';
-            lawyerForm.reset();
-        }
-
-        function displayLawyers(lawyersArray) {
-            lawyersList.innerHTML = '';
-            lawyersArray.forEach(lawyer => {
-                const card = document.createElement('div');
-                card.classList.add('lawyer-card');
-                card.innerHTML = `
-                    <img src="${lawyer.image}" alt="${lawyer.name}">
-                    <div class="lawyer-name">${lawyer.name}</div>
-                    <div class="lawyer-address">${lawyer.address}</div>
-                `;
-                card.addEventListener('click', () => showLawyerDetails(lawyer));
-                lawyersList.appendChild(card);
-            });
-        }
-
-        function showLawyerDetails(lawyer) {
-            window.location.href = `lawyer-details.html?id=${lawyer.id}`;
-        }
-
-        menuBtn.addEventListener('click', openSidebar);
-        closeSidebarBtn.addEventListener('click', closeSidebar);
-        searchBtn.addEventListener('click', openSearch);
-        closeSearchBtn.addEventListener('click', closeSearch);
-        addLawyerBtn.addEventListener('click', openAddLawyerForm);
-        cancelButton.addEventListener('click', closeAddLawyerForm);
-
-        closeModal.onclick = function() {
-            modal.style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
+            function openSidebar() {
+                sidebar.classList.add('active');
             }
-            if (event.target == formContainer) {
-                closeAddLawyerForm();
+
+            function closeSidebar() {
+                sidebar.classList.remove('active');
             }
-        }
 
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeSearch();
-                closeSidebar();
-                modal.style.display = 'none';
-                closeAddLawyerForm();
+            function openSearch() {
+                searchContainer.classList.add('active');
+                searchInput.focus();
             }
-        });
 
-        function filterLawyers() {
-            const filterValue = filterInput.value.toLowerCase().trim();
-            console.log("Filter type:", filterType.value);
-            console.log("Filter value:", filterValue);
-            const filteredLawyers = lawyers.filter(lawyer => {
-                if (filterType.value === 'name') {
-                    return lawyer.name.toLowerCase().includes(filterValue);
-                } else if (filterType.value === 'address') {
-                    console.log("Checking address:", lawyer.address.toLowerCase(), "includes", filterValue);
-                    return lawyer.address.toLowerCase().includes(filterValue);
-                }
-                return false;
-            });
-            console.log("Filtered lawyers:", filteredLawyers);
-            displayLawyers(filteredLawyers);
-        }
+            function closeSearch() {
+                searchContainer.classList.remove('active');
+                searchInput.value = '';
+            }
 
-        filterInput.addEventListener('input', filterLawyers);
-        filterType.addEventListener('change', filterLawyers);
+            function openAddLawyerForm() {
+                formContainer.style.display = 'block';
+            }
 
-        lawyerForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(lawyerForm);
-            const lawyerData = {
-                name: formData.get('name'),
-                address: formData.get('address'),
-                phone: formData.get('phone'),
-                description: formData.get('description'),
-                imageFile: formData.get('image'),
-                whatsapp: formData.get('whatsapp'),
-                facebook: formData.get('facebook'),
-                instagram: formData.get('instagram')
-            };
-
-              const imageRef = storage.ref().child(`lawyer_images/${Date.now()}_${lawyerData.imageFile.name}`);
-            imageRef.put(lawyerData.imageFile).then(snapshot => {
-                return snapshot.ref.getDownloadURL();
-            }).then(downloadURL => {
-                return db.collection('lawyers').add({
-                    name: lawyerData.name,
-                    address: lawyerData.address,
-                    phone: lawyerData.phone,
-                    description: lawyerData.description,
-                    image: downloadURL,
-                    whatsapp: lawyerData.whatsapp,
-                    facebook: lawyerData.facebook,
-                    instagram: lawyerData.instagram
-                });
-            }).then(docRef => {
-                console.log("Document written with ID: ", docRef.id);
+            function closeAddLawyerForm() {
+                formContainer.style.display = 'none';
                 lawyerForm.reset();
-                closeAddLawyerForm();
-                loadLawyersFromDB();
-            }).catch(error => {
-                console.error("Error adding document: ", error);
+            }
+
+            function displayLawyers(lawyersArray) {
+                lawyersList.innerHTML = '';
+                lawyersArray.forEach(lawyer => {
+                    const card = document.createElement('div');
+                    card.classList.add('lawyer-card');
+                    card.innerHTML = `
+                        <img src="${lawyer.image}" alt="${lawyer.name}">
+                        <div class="lawyer-name">${lawyer.name}</div>
+                        <div class="lawyer-address">${lawyer.address}</div>
+                    `;
+                    card.addEventListener('click', () => showLawyerDetails(lawyer));
+                    lawyersList.appendChild(card);
+                });
+            }
+
+            function showLawyerDetails(lawyer) {
+                window.location.href = `lawyer-details.html?id=${lawyer.id}`;
+            }
+
+            menuBtn.addEventListener('click', openSidebar);
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            searchBtn.addEventListener('click', openSearch);
+            closeSearchBtn.addEventListener('click', closeSearch);
+            addLawyerBtn.addEventListener('click', openAddLawyerForm);
+            cancelButton.addEventListener('click', closeAddLawyerForm);
+
+            closeModal.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+                if (event.target == formContainer) {
+                    closeAddLawyerForm();
+                }
+            }
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeSearch();
+                    closeSidebar();
+                    modal.style.display = 'none';
+                    closeAddLawyerForm();
+                }
             });
+
+            function filterLawyers() {
+                const filterValue = filterInput.value.toLowerCase().trim();
+                console.log("Filter type:", filterType.value);
+                console.log("Filter value:", filterValue);
+                const filteredLawyers = lawyers.filter(lawyer => {
+                    if (filterType.value === 'name') {
+                        return lawyer.name.toLowerCase().includes(filterValue);
+                    } else if (filterType.value === 'address') {
+                        console.log("Checking address:", lawyer.address.toLowerCase(), "includes", filterValue);
+                        return lawyer.address.toLowerCase().includes(filterValue);
+                    }
+                    return false;
+                });
+                console.log("Filtered lawyers:", filteredLawyers);
+                displayLawyers(filteredLawyers);
+            }
+
+            filterInput.addEventListener('input', filterLawyers);
+            filterType.addEventListener('change', filterLawyers);
+
+            lawyerForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(lawyerForm);
+                const lawyerData = {
+                    name: formData.get('name'),
+                    address: formData.get('address'),
+                    phone: formData.get('phone'),
+                    description: formData.get('description'),
+                    imageFile: formData.get('image'),
+                    whatsapp: formData.get('whatsapp'),
+                    facebook: formData.get('facebook'),
+                    instagram: formData.get('instagram')
+                };
+
+                const imageRef = storage.ref().child(`lawyer_images/${Date.now()}_${lawyerData.imageFile.name}`);
+                imageRef.put(lawyerData.imageFile).then(snapshot => {
+                    return snapshot.ref.getDownloadURL();
+                }).then(downloadURL => {
+                    return db.collection('lawyers').add({
+                        name: lawyerData.name,
+                        address: lawyerData.address,
+                        phone: lawyerData.phone,
+                        description: lawyerData.description,
+                        image: downloadURL,
+                        whatsapp: lawyerData.whatsapp,
+                        facebook: lawyerData.facebook,
+                        instagram: lawyerData.instagram
+                    });
+                }).then(docRef => {
+                    console.log("Document written with ID: ", docRef.id);
+                    lawyerForm.reset();
+                    closeAddLawyerForm();
+                    loadLawyersFromDB();
+                }).catch(error => {
+                    console.error("Error adding document: ", error);
+                });
+            });
+
+            function loadLawyersFromDB() {
+                db.collection('lawyers').get().then(querySnapshot => {
+                    lawyers = querySnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        name: doc.data().name,
+                        address: doc.data().address,
+                        phone: doc.data().phone,
+                        description: doc.data().description,
+                        image: doc.data().image,
+                        whatsapp: doc.data().whatsapp,
+                        facebook: doc.data().facebook,
+                        instagram: doc.data().instagram
+                    }));
+                    displayLawyers(lawyers);
+                    console.log("Loaded lawyers:", lawyers);
+                }).catch(error => {
+                    console.error("Error loading lawyers:", error);
+                });
+            }
+
+            loadLawyersFromDB();
         });
 
-        function loadLawyersFromDB() {
-            db.collection('lawyers').get().then(querySnapshot => {
-                lawyers = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    name: doc.data().name,
-                    address: doc.data().address,
-                    phone: doc.data().phone,
-                    description: doc.data().description,
-                    image: doc.data().image,
-                    whatsapp: doc.data().whatsapp,
-                    facebook: doc.data().facebook,
-                    instagram: doc.data().instagram
-                }));
-                displayLawyers(lawyers);
-                console.log("Loaded lawyers:", lawyers);
-            }).catch(error => {
-                console.error("Error loading lawyers:", error);
+        function toggleModal() {
+            const modal = document.getElementById('messageModal');
+            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+            if (modal.style.display === 'block') {
+                loadMessages();
+            }
+        }
+
+        function handleFileSelect(event) {
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                sendFile();
+            }
+        }
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (message === '') return;
+
+            db.collection('messages').add({
+                text: message,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'sent',
+                type: 'text'
+            }).then(() => {
+                messageInput.value = '';
+                loadMessages();
+            }).catch((error) => {
+                console.error('خطأ في إرسال الرسالة: ', error);
             });
         }
 
-        loadLawyersFromDB();
-    });
-</script>
+        function sendFile() {
+            if (!selectedFile) return;
+
+            const storageRef = storage.ref(`files/${Date.now()}_${selectedFile.name}`);
+            const uploadTask = storageRef.put(selectedFile);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // يمكن إضافة شريط تقدم هنا
+                }, 
+                (error) => {
+                    console.error('خطأ في رفع الملف: ', error);
+                }, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        db.collection('messages').add({
+                            imageUrl: downloadURL,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            status: 'sent',
+                            type: 'image'
+                        }).then(() => {
+                            selectedFile = null;
+                            document.getElementById('fileInput').value = '';
+                            loadMessages();
+                        }).catch((error) => {
+                            console.error('خطأ في إرسال الرسالة: ', error);
+                        });
+                    });
+                }
+            );
+        }
+
+        function loadMessages() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.innerHTML = '';
+
+            db.collection('messages').orderBy('timestamp', 'desc').limit(20).get().then((snapshot) => {
+                const messages = [];
+                snapshot.forEach((doc) => {
+                    messages.push(doc.data());
+                });
+                messages.reverse().forEach((messageData) => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', messageData.status);
+
+                    if (messageData.type === 'text') {
+                        messageElement.innerHTML = `<p>${messageData.text}</p>`;
+                    } else if (messageData.type === 'image') {
+                        messageElement.innerHTML = `<img src="${messageData.imageUrl}" alt="صورة مرسلة">`;
+                    }
+
+                    messagesContainer.appendChild(messageElement);
+                });
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            });
+        }
+
+        // تحميل الرسائل عند بدء التطبيق
+        loadMessages();
+    </script>
 </body>
 </html>
