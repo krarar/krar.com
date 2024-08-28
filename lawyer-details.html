@@ -116,30 +116,30 @@
     </style>
 </head>
 <body>
-   <div class="lawyer-details">
-        <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
-        <div class="lawyer-info">
-            <h1 id="lawyer-name"></h1>
-            <div class="divider"></div>
-            <p id="lawyer-address"></p>
-            <div class="divider"></div>
-            <p id="lawyer-phone"></p>
-            <div class="divider"></div>
-            <p id="lawyer-description"></p>
+    <div class="container">
+        <!-- مربع المحامي -->
+        <div class="box">
+            <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
+            <div class="info-title">بيانات المحامي</div>
+            <div id="lawyer-name" class="info-item"></div>
+            <div id="lawyer-address" class="info-item"></div>
+            <div id="lawyer-phone" class="info-item"></div>
+            <div id="lawyer-description" class="info-item"></div>
         </div>
-        <div class="social-links">
-            <a id="lawyer-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-        </div>
-        <div class="button-container">
-            <a href="index.html" class="back-button">العودة إلى الصفحة الرئيسية</a>
-            <a id="booking-button" href="#" class="booking-button">حجز</a>
+        
+        <!-- مربع المستخدم -->
+        <div class="box">
+            <div class="info-title">بيانات المستخدم</div>
+            <div class="info-item">الاسم: <input type="text" id="user-name" placeholder="أدخل اسمك"></div>
+            <div class="info-item">العنوان: <input type="text" id="user-address" placeholder="أدخل عنوانك"></div>
+            <div class="info-item">الهاتف: <input type="text" id="user-phone" placeholder="أدخل رقم هاتفك"></div>
+            <div class="info-item">تفاصيل الحجز: <textarea id="booking-details" placeholder="أدخل تفاصيل الحجز"></textarea></div>
         </div>
     </div>
 
+    <a id="booking-button" href="#" class="booking-button">حجز</a>
 
-       <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     
     <script>
@@ -165,36 +165,43 @@
                     if (doc.exists) {
                         const lawyer = doc.data();
                         document.getElementById('lawyer-image').src = lawyer.image;
-                        document.getElementById('lawyer-name').textContent = lawyer.name;
+                        document.getElementById('lawyer-name').textContent = `الاسم: ${lawyer.name}`;
                         document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
                         document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
                         document.getElementById('lawyer-description').textContent = lawyer.description;
-                        
-                        const whatsappLink = document.getElementById('lawyer-whatsapp');
-                        whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
-                        whatsappLink.title = `تواصل مع ${lawyer.name} عبر الواتساب`;
 
-                        const facebookLink = document.getElementById('lawyer-facebook');
-                        facebookLink.href = lawyer.facebook;
-                        facebookLink.title = `صفحة ${lawyer.name} على فيسبوك`;
+                        bookingButton.addEventListener('click', function() {
+                            const userName = document.getElementById('user-name').value;
+                            const userAddress = document.getElementById('user-address').value;
+                            const userPhone = document.getElementById('user-phone').value;
+                            const bookingDetails = document.getElementById('booking-details').value;
 
-                        const instagramLink = document.getElementById('lawyer-instagram');
-                        instagramLink.href = lawyer.instagram;
-                        instagramLink.title = `حساب ${lawyer.name} على إنستغرام`;
-
-                        // Update booking button link with lawyer info
-                        bookingButton.href = `booking.html?id=${lawyerId}&name=${encodeURIComponent(lawyer.name)}&address=${encodeURIComponent(lawyer.address)}&phone=${encodeURIComponent(lawyer.phone)}&description=${encodeURIComponent(lawyer.description)}`;
+                            db.collection('bookings').add({
+                                lawyerId: lawyerId,
+                                lawyerName: lawyer.name,
+                                lawyerImage: lawyer.image,
+                                userName: userName,
+                                userAddress: userAddress,
+                                userPhone: userPhone,
+                                bookingDetails: bookingDetails,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            }).then(() => {
+                                alert('تم إرسال الحجز بنجاح!');
+                            }).catch(error => {
+                                console.error("خطأ في إرسال الحجز:", error);
+                            });
+                        });
                     } else {
                         console.log("لا يوجد محامي بهذا المعرف");
-                        document.querySelector('.lawyer-details').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
+                        document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
                     }
                 }).catch(error => {
                     console.error("خطأ في استرجاع بيانات المحامي:", error);
-                    document.querySelector('.lawyer-details').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
+                    document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
                 });
             } else {
                 console.log("لم يتم تحديد معرف المحامي");
-                document.querySelector('.lawyer-details').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
+                document.querySelector('.container').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
             }
         });
     </script>
