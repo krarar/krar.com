@@ -111,7 +111,7 @@
 
             .info-item {
                 font-size: 16px;
-            
+
         }
          .social-links {
             display: flex;
@@ -152,7 +152,7 @@
             <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
             <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        
+
         <!-- مربع المستخدم -->
         <div class="box">
             <div class="info-title">بيانات المستخدم</div>
@@ -167,7 +167,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
@@ -195,7 +195,7 @@
                         document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
                         document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
                         document.getElementById('lawyer-description').textContent = lawyer.description;
-                        
+
                         const whatsappLink = document.getElementById('lawyer-whatsapp');
                         whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
                         whatsappLink.title = `تواصل مع ${lawyer.name} عبر الواتساب`;
@@ -218,6 +218,12 @@
                                 lawyerId: lawyerId,
                                 lawyerName: lawyer.name,
                                 lawyerImage: lawyer.image,
+                                lawyerAddress: lawyer.address,
+                                lawyerPhone: lawyer.phone,
+                                lawyerDescription: lawyer.description,
+                                lawyerWhatsapp: lawyer.whatsapp,
+                                lawyerFacebook: lawyer.facebook,
+                                lawyerInstagram: lawyer.instagram,
                                 userName: userName,
                                 userAddress: userAddress,
                                 userPhone: userPhone,
