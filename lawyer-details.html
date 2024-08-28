@@ -111,7 +111,28 @@
 
             .info-item {
                 font-size: 16px;
-            }
+            
+        }
+         .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .social-links a {
+            font-size: 28px;
+            color: #3498db;
+            margin: 0 10px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #2980b9;
+            transform: scale(1.1);
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -125,6 +146,11 @@
             <div id="lawyer-address" class="info-item"></div>
             <div id="lawyer-phone" class="info-item"></div>
             <div id="lawyer-description" class="info-item"></div>
+        </div>
+          <div class="social-links">
+            <a id="lawyer-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
         
         <!-- مربع المستخدم -->
@@ -169,6 +195,18 @@
                         document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
                         document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
                         document.getElementById('lawyer-description').textContent = lawyer.description;
+                        
+                        const whatsappLink = document.getElementById('lawyer-whatsapp');
+                        whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
+                        whatsappLink.title = `تواصل مع ${lawyer.name} عبر الواتساب`;
+
+                        const facebookLink = document.getElementById('lawyer-facebook');
+                        facebookLink.href = lawyer.facebook;
+                        facebookLink.title = `صفحة ${lawyer.name} على فيسبوك`;
+
+                        const instagramLink = document.getElementById('lawyer-instagram');
+                        instagramLink.href = lawyer.instagram;
+                        instagramLink.title = `حساب ${lawyer.name} على إنستغرام`;
 
                         bookingButton.addEventListener('click', function() {
                             const userName = document.getElementById('user-name').value;
