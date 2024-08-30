@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تفاصيل المحامي</title>
+    <title>تفاصيل سيارت</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -141,7 +141,7 @@
         <!-- مربع المحامي -->
         <div class="box">
             <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
-            <div class="info-title">بيانات المحامي</div>
+            <div class="info-title">بيانات الدكتور</div>
             <div id="lawyer-name" class="info-item"></div>
             <div id="lawyer-address" class="info-item"></div>
             <div id="lawyer-phone" class="info-item"></div>
@@ -236,15 +236,15 @@
                             });
                         });
                     } else {
-                        console.log("لا يوجد محامي بهذا المعرف");
+                        console.log("لا يوجد سيارة بهذا المعرف");
                         document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
                     }
                 }).catch(error => {
-                    console.error("خطأ في استرجاع بيانات المحامي:", error);
+                    console.error("خطأ في استرجاع بيانات السيارت:", error);
                     document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
                 });
             } else {
-                console.log("لم يتم تحديد معرف المحامي");
+                console.log("لم يتم تحديد معرف السيارت");
                 document.querySelector('.container').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
             }
         });
