@@ -236,15 +236,15 @@
                             });
                         });
                     } else {
-                        console.log("لا يوجد محامي بهذا المعرف");
-                        document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
+                        console.log("لا يوجد دكتور بهذا المعرف");
+                        document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا الدكتور.</p>';
                     }
                 }).catch(error => {
-                    console.error("خطأ في استرجاع بيانات المحامي:", error);
+                    console.error("خطأ في استرجاع بيانات الدكتور:", error);
                     document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
                 });
             } else {
-                console.log("لم يتم تحديد معرف المحامي");
+                console.log("لم يتم تحديد معرف الدكتور");
                 document.querySelector('.container').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
             }
         });
