@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المحامي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f7f9fc;
+            color: #2c3e50;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            gap: 20px;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+        }
+
+        .lawyer-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-title {
+            color: #3498db;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #34495e;
+        }
+
+        .info-item input,
+        .info-item textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .info-item textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .booking-button {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            color: #fff;
+            background-color: #e67e22;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .booking-button:hover {
+            background-color: #d35400;
+            transform: scale(1.05);
+        }
+
+        @media screen and (max-width: 768px) {
+            .box {
+                width: 90%;
+            }
+
+            .info-title {
+                font-size: 22px;
+            }
+
+            .info-item {
+                font-size: 16px;
+
+        }
+         .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .social-links a {
+            font-size: 28px;
+            color: #3498db;
+            margin: 0 10px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #2980b9;
+            transform: scale(1.1);
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- مربع المحامي -->
+        <div class="box">
+            <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
+            <div class="info-title">بيانات المحامي</div>
+            <div id="lawyer-name" class="info-item"></div>
+            <div id="lawyer-address" class="info-item"></div>
+            <div id="lawyer-phone" class="info-item"></div>
+            <div id="lawyer-description" class="info-item"></div>
+        </div>
+          <div class="social-links">
+            <a id="lawyer-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+
+        <!-- مربع المستخدم -->
+        <div class="box">
+            <div class="info-title">بيانات المستخدم</div>
+            <div class="info-item">الاسم: <input type="text" id="user-name" placeholder="أدخل اسمك"></div>
+            <div class="info-item">العنوان: <input type="text" id="user-address" placeholder="أدخل عنوانك"></div>
+            <div class="info-item">الهاتف: <input type="text" id="user-phone" placeholder="أدخل رقم هاتفك"></div>
+            <div class="info-item">تفاصيل الحجز: <textarea id="booking-details" placeholder="أدخل تفاصيل الحجز"></textarea></div>
+        </div>
+    </div>
+
+    <a id="booking-button" href="#" class="booking-button">حجز</a>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lawyerId = urlParams.get('id');
+            const bookingButton = document.getElementById('booking-button');
+
+            if (lawyerId) {
+                db.collection('lawyers2').doc(lawyerId).get().then(doc => {
+                    if (doc.exists) {
+                        const lawyer = doc.data();
+                        document.getElementById('lawyer-image').src = lawyer.image;
+                        document.getElementById('lawyer-name').textContent = `الاسم: ${lawyer.name}`;
+                        document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
+                        document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
+                        document.getElementById('lawyer-description').textContent = lawyer.description;
+
+                        const whatsappLink = document.getElementById('lawyer-whatsapp');
+                        whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
+                        whatsappLink.title = `تواصل مع ${lawyer.name} عبر الواتساب`;
+
+                        const facebookLink = document.getElementById('lawyer-facebook');
+                        facebookLink.href = lawyer.facebook;
+                        facebookLink.title = `صفحة ${lawyer.name} على فيسبوك`;
+
+                        const instagramLink = document.getElementById('lawyer-instagram');
+                        instagramLink.href = lawyer.instagram;
+                        instagramLink.title = `حساب ${lawyer.name} على إنستغرام`;
+
+                        bookingButton.addEventListener('click', function() {
+                            const userName = document.getElementById('user-name').value;
+                            const userAddress = document.getElementById('user-address').value;
+                            const userPhone = document.getElementById('user-phone').value;
+                            const bookingDetails = document.getElementById('booking-details').value;
+
+                            db.collection('bookings').add({
+                                lawyerId: lawyerId,
+                                lawyerName: lawyer.name,
+                                Image: lawyer.image,
+                                lawyerAddress: lawyer.address,
+                                lawyerPhone: lawyer.phone,
+                                lawyerDescription: lawyer.description,
+                                lawyerWhatsapp: lawyer.whatsapp,
+                                lawyerFacebook: lawyer.facebook,
+                                lawyerInstagram: lawyer.instagram,
+                                userName: userName,
+                                userAddress: userAddress,
+                                userPhone: userPhone,
+                                bookingDetails: bookingDetails,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            }).then(() => {
+                                alert('تم إرسال الحجز بنجاح!');
+                            }).catch(error => {
+                                console.error("خطأ في إرسال الحجز:", error);
+                            });
+                        });
+                    } else {
+                        console.log("لا يوجد محامي بهذا المعرف");
+                        document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
+                    }
+                }).catch(error => {
+                    console.error("خطأ في استرجاع بيانات المحامي:", error);
+                    document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
+                });
+            } else {
+                console.log("لم يتم تحديد معرف المحامي");
+                document.querySelector('.container').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
