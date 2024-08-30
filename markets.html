@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الاسواق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+     :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #f0f3f6;
+    --text-color: #2c3e50;
+    --card-color: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --image-shadow: rgba(0, 0, 0, 0.2);
+    --modal-background: #ffffff;
+    --modal-border: #dbdbdb;
+    --modal-shadow: rgba(0, 0, 0, 0.15);
+}
+
+       body {
+    font-family: 'Tajawal', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding-bottom: 60px;
+}
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .title-bar h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .title-bar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .title-bar button:hover {
+            transform: scale(1.1);
+        }
+
+        #bottom-toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--card-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px var(--shadow-color);
+        }
+
+        #bottom-toolbar a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #bottom-toolbar i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        #lawyers-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .lawyer-card {
+            position: relative;
+            margin: 10px;
+            flex: 1 1 calc(50% - 20px);
+            max-width: calc(50% - 20px);
+            cursor: pointer;
+        }
+
+        .lawyer-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px var(--image-shadow);
+        }
+
+        .lawyer-name {
+            position: absolute;
+            bottom: 40px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .lawyer-address {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1003;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        .modal-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content p {
+            margin: 5px 0;
+        }
+
+        .modal-links {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .modal-links a {
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .modal-links i {
+            font-size: 24px;
+            margin: 0 5px;
+        }
+
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container form input,
+        .form-container form textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid var(--text-color);
+            border-radius: 5px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .form-container form button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container form button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        #cancel-button {
+            background-color: var(--card-color);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            margin-top: 5px;
+        }
+
+        #cancel-button:hover {
+            background-color: var(--text-color);
+            color: var(--card-color);
+        }
+
+        #search-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 100px;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        #search-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #search-input {
+            width: 80%;
+            max-width: 600px;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #search-input:focus {
+            outline: none;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #close-search {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background-color: var(--card-color);
+            box-shadow: -2px 0 10px var(--shadow-color);
+            padding-top: 70px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1001;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        .close-sidebar-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar nav ul li {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--background-color);
+        }
+
+        #sidebar nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        #sidebar nav ul li a i {
+            margin-left: 15px;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        #filter-section {
+            background-color: var(--card-color);
+            padding: 15px;
+            margin: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #filter-type {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        #filter-input {
+            width: 65%;
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            font-family: 'Tajawal', sans-serif;
+        }
+.message-icon {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    z-index: 1000;
+}
+#messageModal {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 50px;
+            width: 250px;
+            height: 450px;
+            background-color: #FFFFFF;
+            border-radius: 35px;
+            box-shadow: 0 5px 2px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+        .modal-content {
+            width: 80%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px;
+            border-bottom: 1px solid #DBDBDB;
+        }
+        .header h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #262626;
+        }
+
+        .header button {
+            background: none;
+            border: none;
+            color: #262626;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .message p {
+            margin: 0;
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 70%;
+            font-size: 14px;
+            line-height: 18px;
+        }
+        .message.sent p {
+            background-color: #EEE;
+            color: #262626;
+            margin-left: auto;
+        }
+
+        .message.received p {
+            background-color: #FFFFFF;
+            color: #262626;
+            border: 1px solid #DBDBDB;
+        }
+
+        .message img {
+            max-width: 30%;
+            border-radius: 5px;
+        }
+        .message-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #DBDBDB;
+        }
+
+        .message-input textarea {
+            flex-grow: 1;
+            border: 1px solid #DBDBDB;
+            border-radius: 18px;
+            padding: 8px 12px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+        }
+        .message-input button {
+            background: none;
+            border: none;
+            color: #0095F6;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px 12px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+.file-label {
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .file-label svg {
+            width: 24px;
+            height: 24px;
+            fill: #262626;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title-bar">
+            <button id="menu-btn"><i class="fas fa-bars"></i></button>
+            <h1>دليل الاسواق</h1>
+            <button id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+    </header>
+    <div id="filter-section">
+        <select id="filter-type">
+            <option value="name">الاسم</option>
+            <option value="address">العنوان</option>
+        </select>
+        <input type="text" id="filter-input" placeholder="أدخل كلمة البحث...">
+    </div>
+
+    <aside id="sidebar">
+        <button id="close-sidebar" class="close-sidebar-button"><i class="fas fa-times"></i></button>
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="recent.html"><i class="fas fa-history"></i> آخر الزيارات</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                <li><a href="about.html"><i class="fas fa-info-circle"></i> عن التطبيق</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="ابحث عن سوق...">
+        <i id="close-search" class="fas fa-times"></i>
+    </div>
+
+    <div id="lawyers-list">
+        <!-- سيتم إضافة بطاقات الدكتور هنا بشكل ديناميكي -->
+    </div>
+
+    <div id="bottom-toolbar">
+        <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+        <a href="#" id="add-lawyer-btn"><i class="fas fa-plus-circle"></i> إضافة سوق</a>
+    </div>
+
+    <div id="form-container" class="form-container">
+        <form id="lawyer-form">
+            <input type="text" id="name" name="name" placeholder="اسم السوق" required>
+            <input type="text" id="address" name="address" placeholder="عنوان السوق" required>
+            <input type="tel" id="phone" name="phone" placeholder="رقم الهاتف" required>
+            <textarea id="description" name="description" placeholder="وصف قصير" required></textarea>
+            <input type="text" id="whatsapp" name="whatsapp" placeholder="رقم الواتساب (بدون +)" required>
+            <input type="url" id="facebook" name="facebook" placeholder="رابط الفيسبوك" required>
+            <input type="url" id="instagram" name="instagram" placeholder="رابط الإنستقرام" required>
+            <input type="file" id="image" name="image" accept="image/*" required>
+            <button type="submit">إضافة الدكتور</button>
+            <button type="button" id="cancel-button">إلغاء</button>
+        </form>
+    </div>
+
+    <div id="lawyer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img class="modal-image" src="" alt="صورة السوق">
+            <h2 id="modal-name"></h2>
+            <p id="modal-address"></p>
+            <p id="modal-phone"></p>
+            <p id="modal-description"></p>
+            <div class="modal-links">
+                <a id="modal-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a id="modal-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a id="modal-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <button class="message-icon" onclick="toggleModal()">✉️</button>
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="header">
+                <button onclick="toggleModal()">✖️</button>
+                <h2>الرسائل</h2>
+                <div></div>
+            </div>
+            <div class="messages" id="messagesContainer">
+                <!-- الرسائل ستظهر هنا -->
+            </div>
+            <div class="message-input">
+                <label for="fileInput" class="file-label">
+                    <svg aria-label="إضافة صورة أو ملف" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24">
+                        <path d="M6.549 5.013A1.557 1.557 0 1 0 8.106 6.57a1.557 1.557 0 0 0-1.557-1.557Z" fill-rule="evenodd"></path>
+                        <path d="m2 18.605 3.901-3.9a.908.908 0 0 1 1.284 0l2.807 2.806a.908.908 0 0 0 1.283 0l5.534-5.534a.908.908 0 0 1 1.283 0l3.905 3.905" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
+                        <path d="M18.44 2.004A3.56 3.56 0 0 1 22 5.564h0v12.873a3.56 3.56 0 0 1-3.56 3.56H5.568a3.56 3.56 0 0 1-3.56-3.56V5.563a3.56 3.56 0 0 1 3.56-3.56Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </label>
+                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)" />
+                <textarea id="messageInput" placeholder="أرسل رسالة..." rows="1"></textarea>
+                <button onclick="sendMessage()">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script>
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        let selectedFile = null;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const searchBtn = document.getElementById('search-btn');
+            const closeSearchBtn = document.getElementById('close-search');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const searchContainer = document.getElementById('search-container');
+              const searchInput = document.getElementById('search-input');
+            const formContainer = document.getElementById('form-container');
+            const addLawyerBtn = document.getElementById('add-lawyer-btn');
+            const lawyerForm = document.getElementById('lawyer-form');
+            const lawyersList = document.getElementById('lawyers-list');
+            const modal = document.getElementById('lawyer-modal');
+            const closeModal = document.getElementsByClassName('close')[0];
+            const cancelButton = document.getElementById('cancel-button');
+            const filterType = document.getElementById('filter-type');
+            const filterInput = document.getElementById('filter-input');
+            let lawyers = [];
+
+            function openSidebar() {
+                sidebar.classList.add('active');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('active');
+            }
+
+            function openSearch() {
+                searchContainer.classList.add('active');
+                searchInput.focus();
+            }
+
+            function closeSearch() {
+                searchContainer.classList.remove('active');
+                searchInput.value = '';
+            }
+
+            function openAddLawyerForm() {
+                formContainer.style.display = 'block';
+            }
+
+            function closeAddLawyerForm() {
+                formContainer.style.display = 'none';
+                lawyerForm.reset();
+            }
+
+            function displayLawyers(lawyersArray) {
+                lawyersList.innerHTML = '';
+                lawyersArray.forEach(lawyer => {
+                    const card = document.createElement('div');
+                    card.classList.add('lawyer-card');
+                    card.innerHTML = `
+                        <img src="${lawyer.image}" alt="${lawyer.name}">
+                        <div class="lawyer-name">${lawyer.name}</div>
+                        <div class="lawyer-address">${lawyer.address}</div>
+                    `;
+                    card.addEventListener('click', () => showLawyerDetails(lawyer));
+                    lawyersList.appendChild(card);
+                });
+            }
+
+            function showLawyerDetails(lawyer) {
+                window.location.href = `lawyer-details.html?id=${lawyer.id}`;
+            }
+
+            menuBtn.addEventListener('click', openSidebar);
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            searchBtn.addEventListener('click', openSearch);
+            closeSearchBtn.addEventListener('click', closeSearch);
+            addLawyerBtn.addEventListener('click', openAddLawyerForm);
+            cancelButton.addEventListener('click', closeAddLawyerForm);
+
+            closeModal.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+                if (event.target == formContainer) {
+                    closeAddLawyerForm();
+                }
+            }
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeSearch();
+                    closeSidebar();
+                    modal.style.display = 'none';
+                    closeAddLawyerForm();
+                }
+            });
+
+            function filterLawyers() {
+                const filterValue = filterInput.value.toLowerCase().trim();
+                console.log("Filter type:", filterType.value);
+                console.log("Filter value:", filterValue);
+                const filteredLawyers = lawyers.filter(lawyer => {
+                    if (filterType.value === 'name') {
+                        return lawyer.name.toLowerCase().includes(filterValue);
+                    } else if (filterType.value === 'address') {
+                        console.log("Checking address:", lawyer.address.toLowerCase(), "includes", filterValue);
+                        return lawyer.address.toLowerCase().includes(filterValue);
+                    }
+                    return false;
+                });
+                console.log("Filtered lawyers:", filteredLawyers);
+                displayLawyers(filteredLawyers);
+            }
+
+            filterInput.addEventListener('input', filterLawyers);
+            filterType.addEventListener('change', filterLawyers);
+
+            lawyerForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(lawyerForm);
+                const lawyerData = {
+                    name: formData.get('name'),
+                    address: formData.get('address'),
+                    phone: formData.get('phone'),
+                    description: formData.get('description'),
+                    imageFile: formData.get('image'),
+                    whatsapp: formData.get('whatsapp'),
+                    facebook: formData.get('facebook'),
+                    instagram: formData.get('instagram')
+                };
+
+                const imageRef = storage.ref().child(`lawyer_images/${Date.now()}_${lawyerData.imageFile.name}`);
+                imageRef.put(lawyerData.imageFile).then(snapshot => {
+                    return snapshot.ref.getDownloadURL();
+                }).then(downloadURL => {
+                    return db.collection('lawyers2').add({
+                        name: lawyerData.name,
+                        address: lawyerData.address,
+                        phone: lawyerData.phone,
+                        description: lawyerData.description,
+                        image: downloadURL,
+                        whatsapp: lawyerData.whatsapp,
+                        facebook: lawyerData.facebook,
+                        instagram: lawyerData.instagram
+                    });
+                }).then(docRef => {
+                    console.log("Document written with ID: ", docRef.id);
+                    lawyerForm.reset();
+                    closeAddLawyerForm();
+                    loadLawyersFromDB();
+                }).catch(error => {
+                    console.error("Error adding document: ", error);
+                });
+            });
+
+            function loadLawyersFromDB() {
+                db.collection('lawyers2').get().then(querySnapshot => {
+                    lawyers = querySnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        name: doc.data().name,
+                        address: doc.data().address,
+                        phone: doc.data().phone,
+                        description: doc.data().description,
+                        image: doc.data().image,
+                        whatsapp: doc.data().whatsapp,
+                        facebook: doc.data().facebook,
+                        instagram: doc.data().instagram
+                    }));
+                    displayLawyers(lawyers);
+                    console.log("Loaded lawyers:", lawyers);
+                }).catch(error => {
+                    console.error("Error loading lawyers:", error);
+                });
+            }
+
+            loadLawyersFromDB();
+        });
+
+        function toggleModal() {
+            const modal = document.getElementById('messageModal');
+            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+            if (modal.style.display === 'block') {
+                loadMessages();
+            }
+        }
+
+        function handleFileSelect(event) {
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                sendFile();
+            }
+        }
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (message === '') return;
+
+            db.collection('messages').add({
+                text: message,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'sent',
+                type: 'text'
+            }).then(() => {
+                messageInput.value = '';
+                loadMessages();
+            }).catch((error) => {
+                console.error('خطأ في إرسال الرسالة: ', error);
+            });
+        }
+
+        function sendFile() {
+            if (!selectedFile) return;
+
+            const storageRef = storage.ref(`files/${Date.now()}_${selectedFile.name}`);
+            const uploadTask = storageRef.put(selectedFile);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // يمكن إضافة شريط تقدم هنا
+                }, 
+                (error) => {
+                    console.error('خطأ في رفع الملف: ', error);
+                }, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        db.collection('messages').add({
+                            imageUrl: downloadURL,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            status: 'sent',
+                            type: 'image'
+                        }).then(() => {
+                            selectedFile = null;
+                            document.getElementById('fileInput').value = '';
+                            loadMessages();
+                        }).catch((error) => {
+                            console.error('خطأ في إرسال الرسالة: ', error);
+                        });
+                    });
+                }
+            );
+        }
+
+        function loadMessages() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.innerHTML = '';
+
+            db.collection('messages').orderBy('timestamp', 'desc').limit(20).get().then((snapshot) => {
+                const messages = [];
+                snapshot.forEach((doc) => {
+                    messages.push(doc.data());
+                });
+                messages.reverse().forEach((messageData) => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', messageData.status);
+
+                    if (messageData.type === 'text') {
+                        messageElement.innerHTML = `<p>${messageData.text}</p>`;
+                    } else if (messageData.type === 'image') {
+                        messageElement.innerHTML = `<img src="${messageData.imageUrl}" alt="صورة مرسلة">`;
+                    }
+
+                    messagesContainer.appendChild(messageElement);
+                });
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            });
+        }
+
+        // تحميل الرسائل عند بدء التطبيق
+        loadMessages();
+    </script>
+</body>
+</html>
