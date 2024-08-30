@@ -187,7 +187,7 @@
             const bookingButton = document.getElementById('booking-button');
 
             if (lawyerId) {
-                db.collection('lawyers').doc(lawyerId).get().then(doc => {
+                db.collection('lawyers4').doc(lawyerId).get().then(doc => {
                     if (doc.exists) {
                         const lawyer = doc.data();
                         document.getElementById('lawyer-image').src = lawyer.image;
