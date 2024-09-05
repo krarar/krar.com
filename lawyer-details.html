@@ -347,12 +347,12 @@
                 return;
             }
             
-            db.collection('lawyers').doc(lawyerId).get().then(doc => {
+            db.collection('lawyers1').doc(lawyerId).get().then(doc => {
                 if (doc.exists) {
                     const currentValue = doc.data()[field] || 0;
                     const newValue = currentValue + 1;
                     
-                    db.collection('lawyers').doc(lawyerId).update({
+                    db.collection('lawyers1').doc(lawyerId).update({
                         [field]: newValue
                     }).then(() => {
                         document.getElementById(`${field.slice(0, -1)}-count`).textContent = newValue;
@@ -368,7 +368,7 @@
         }
 
         function addComment(lawyerId, commentText) {
-            db.collection('lawyers').doc(lawyerId).collection('comments').add({
+            db.collection('lawyers1').doc(lawyerId).collection('comments').add({
                 text: commentText,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
@@ -384,7 +384,7 @@
             const commentsContainer = document.getElementById('comments-container');
             commentsContainer.innerHTML = '<h3>التعليقات</h3>';
             
-            db.collection('lawyers').doc(lawyerId).collection('comments')
+            db.collection('lawyers1').doc(lawyerId).collection('comments')
                 .orderBy('timestamp', 'desc')
                 .get().then(querySnapshot => {
                     querySnapshot.forEach(doc => {
@@ -402,5 +402,7 @@
                 });
         }
     </script>
+</body>
+</html>
 </body>
 </html>
