@@ -741,7 +741,7 @@
             <textarea id="description" name="description" placeholder="وصف قصير" required></textarea>
             <input type="text" id="whatsapp" name="whatsapp" placeholder="رقم الواتساب (بدون +)" required>
             <input type="url" id="facebook" name="facebook" placeholder="رابط الفيسبوك" required>
-            <input type="url" id="instagram" name="instagram" placeholder="رابط الإنستقرام" required>
+            name="instagram" placeholder="رابط الإنستقرام" required>
             <input type="file" id="image" name="image" accept="image/*" required>
             <button type="submit">إضافة الدكتور</button>
             <button type="button" id="cancel-button">إلغاء</button>
@@ -1185,7 +1185,7 @@ function loadMessages() {
 }
 
 function showLawyerDetails(lawyer) {
-    window.location.href = `lawyer3-details.html?id=${lawyer.id}`;
+    window.location.href = `lawyer-details.html?id=${lawyer.id}`;
 }
 
 // CSS styles (add these to your stylesheet)
