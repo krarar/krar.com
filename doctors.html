@@ -18,8 +18,14 @@
             --image-shadow: rgba(0, 0, 0, 0.2);
             --modal-background: #ffffff;
             --modal-border: #dbdbdb;
+            
             --modal-shadow: rgba(0, 0, 0, 0.15);
-        }
+            --like-button.active,
+.rate-button.active,
+.favorite-button.active {
+    color: #FF4500; /* لون مميز عند التفعيل */
+}
+
 
         body {
             font-family: 'Tajawal', sans-serif;
@@ -741,7 +747,7 @@
             <textarea id="description" name="description" placeholder="وصف قصير" required></textarea>
             <input type="text" id="whatsapp" name="whatsapp" placeholder="رقم الواتساب (بدون +)" required>
             <input type="url" id="facebook" name="facebook" placeholder="رابط الفيسبوك" required>
-            name="instagram" placeholder="رابط الإنستقرام" required>
+            <input type="url" id="instagram" name="instagram" placeholder="رابط الإنستقرام" required>
             <input type="file" id="image" name="image" accept="image/*" required>
             <button type="submit">إضافة الدكتور</button>
             <button type="button" id="cancel-button">إلغاء</button>
@@ -1018,19 +1024,38 @@ document.addEventListener('DOMContentLoaded', function () {
     loadLawyersFromDB();
 });
 
+// إنشاء أو استرجاع معرف فريد للجهاز
+function getUniqueId() {
+    let uniqueId = localStorage.getItem('uniqueId');
+    if (!uniqueId) {
+        uniqueId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+        localStorage.setItem('uniqueId', uniqueId);
+    }
+    return uniqueId;
+}
+
+
 function toggleLike(lawyerId, button) {
     const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+    const userId = getUniqueId();  // استرجاع المعرف الفريد
+
     lawyerRef.get().then(doc => {
         if (doc.exists) {
             const currentLikes = doc.data().likes || 0;
-            const isLiked = doc.data().liked || false;
-            const newLikes = isLiked ? currentLikes - 1 : currentLikes + 1;
-            const newIsLiked = !isLiked;
-            
+            const likedBy = doc.data().likedBy || []; // قائمة المستخدمين الذين أعجبوا
+
+            // التحقق إذا كان المستخدم قد أعجب بالفعل
+            const userHasLiked = likedBy.includes(userId);
+
+            // تحديث الإعجاب بناءً على حالة المستخدم
+            const newLikes = userHasLiked ? currentLikes - 1 : currentLikes + 1;
+            const updatedLikedBy = userHasLiked ? likedBy.filter(id => id !== userId) : [...likedBy, userId];
+
             lawyerRef.update({
                 likes: newLikes,
-                liked: newIsLiked
+                likedBy: updatedLikedBy
             }).then(() => {
+                // تحديث حالة الزر
                 button.classList.toggle('active');
                 const countElement = button.nextElementSibling;
                 countElement.textContent = newLikes;
@@ -1042,20 +1067,27 @@ function toggleLike(lawyerId, button) {
         console.error("Error getting document: ", error);
     });
 }
-
 function toggleRate(lawyerId, button) {
     const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+    const userId = getUniqueId();  // استرجاع المعرف الفريد
+
     lawyerRef.get().then(doc => {
         if (doc.exists) {
             const currentRating = doc.data().rating || 0;
-            const isRated = doc.data().rated || false;
-            const newRating = isRated ? currentRating - 1 : currentRating + 1;
-            const newIsRated = !isRated;
-            
+            const ratedBy = doc.data().ratedBy || []; // قائمة المستخدمين الذين قيموا
+
+            // التحقق إذا كان المستخدم قد قيم بالفعل
+            const userHasRated = ratedBy.includes(userId);
+
+            // تحديث التقييم بناءً على حالة المستخدم
+            const newRating = userHasRated ? currentRating - 1 : currentRating + 1;
+            const updatedRatedBy = userHasRated ? ratedBy.filter(id => id !== userId) : [...ratedBy, userId];
+
             lawyerRef.update({
                 rating: newRating,
-                rated: newIsRated
+                ratedBy: updatedRatedBy
             }).then(() => {
+                // تحديث حالة الزر
                 button.classList.toggle('active');
                 const countElement = button.nextElementSibling;
                 countElement.textContent = newRating;
@@ -1067,20 +1099,27 @@ function toggleRate(lawyerId, button) {
         console.error("Error getting document: ", error);
     });
 }
-
 function toggleFavorite(lawyerId, button) {
     const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+    const userId = getUniqueId();  // استرجاع المعرف الفريد
+
     lawyerRef.get().then(doc => {
         if (doc.exists) {
             const currentFavorites = doc.data().favorites || 0;
-            const isFavorited = doc.data().favorited || false;
-            const newFavorites = isFavorited ? currentFavorites - 1 : currentFavorites + 1;
-            const newIsFavorited = !isFavorited;
-            
+            const favoritedBy = doc.data().favoritedBy || []; // قائمة المستخدمين الذين أضافوا للمفضلة
+
+            // التحقق إذا كان المستخدم قد أضاف للمفضلة بالفعل
+            const userHasFavorited = favoritedBy.includes(userId);
+
+            // تحديث المفضلة بناءً على حالة المستخدم
+            const newFavorites = userHasFavorited ? currentFavorites - 1 : currentFavorites + 1;
+            const updatedFavoritedBy = userHasFavorited ? favoritedBy.filter(id => id !== userId) : [...favoritedBy, userId];
+
             lawyerRef.update({
                 favorites: newFavorites,
-                favorited: newIsFavorited
+                favoritedBy: updatedFavoritedBy
             }).then(() => {
+                // تحديث حالة الزر
                 button.classList.toggle('active');
                 const countElement = button.nextElementSibling;
                 countElement.textContent = newFavorites;
@@ -1092,6 +1131,7 @@ function toggleFavorite(lawyerId, button) {
         console.error("Error getting document: ", error);
     });
 }
+
 
 function toggleMessageModal() {
     const modal = document.getElementById('messageModal');
