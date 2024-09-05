@@ -196,6 +196,9 @@
                 <button id="rate-button" class="interaction-btn">
                     <i class="fas fa-star"></i> تقييم (<span id="rate-count">0</span>)
                 </button>
+                <button id="favorite-button" class="interaction-btn">
+                    <i class="fas fa-heart"></i> مفضلة (<span id="favorite-count">0</span>)
+                </button>
                 <button id="comment-button" class="interaction-btn">
                     <i class="fas fa-comment"></i> تعليق
                 </button>
@@ -246,7 +249,7 @@
             const bookingButton = document.getElementById('booking-button');
 
             if (lawyerId) {
-                db.collection('lawyers').doc(lawyerId).get().then(doc => {
+                db.collection('lawyers1').doc(lawyerId).get().then(doc => {
                     if (doc.exists) {
                         const lawyer = doc.data();
                         displayLawyerInfo(lawyer);
@@ -288,6 +291,7 @@
 
             document.getElementById('like-count').textContent = lawyer.likes || 0;
             document.getElementById('rate-count').textContent = lawyer.rating || 0;
+            document.getElementById('favorite-count').textContent = lawyer.favorites || 0;
         }
 
         function setupBookingButton(lawyerId, lawyer) {
@@ -324,11 +328,13 @@
         function setupInteractionButtons(lawyerId, lawyer) {
             const likeButton = document.getElementById('like-button');
             const rateButton = document.getElementById('rate-button');
+            const favoriteButton = document.getElementById('favorite-button');
             const commentButton = document.getElementById('comment-button');
             const commentForm = document.querySelector('.comment-form');
             
-            likeButton.addEventListener('click', () => toggleInteraction(lawyerId, 'likes', likeButton));
-            rateButton.addEventListener('click', () => toggleInteraction(lawyerId, 'rating', rateButton));
+            likeButton.addEventListener('click', () => toggleLike(lawyerId, likeButton));
+            rateButton.addEventListener('click', () => toggleRate(lawyerId, rateButton));
+            favoriteButton.addEventListener('click', () => toggleFavorite(lawyerId, favoriteButton));
             commentButton.addEventListener('click', () => {
                 commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
             });
@@ -341,29 +347,102 @@
             });
         }
 
-        function toggleInteraction(lawyerId, field, button) {
-            if (localStorage.getItem(`${field}_${lawyerId}`)) {
-                alert('لقد قمت بالفعل بهذا الإجراء.');
-                return;
+        function getUniqueId() {
+            let uniqueId = localStorage.getItem('uniqueId');
+            if (!uniqueId) {
+                uniqueId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+                localStorage.setItem('uniqueId', uniqueId);
             }
-            
-            db.collection('lawyers1').doc(lawyerId).get().then(doc => {
+            return uniqueId;
+        }
+
+        function toggleLike(lawyerId, button) {
+            const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+            const userId = getUniqueId(); 
+
+            lawyerRef.get().then(doc => {
                 if (doc.exists) {
-                    const currentValue = doc.data()[field] || 0;
-                    const newValue = currentValue + 1;
-                    
-                    db.collection('lawyers1').doc(lawyerId).update({
-                        [field]: newValue
+                    const currentLikes = doc.data().likes || 0;
+                    const likedBy = doc.data().likedBy || []; 
+
+                    const userHasLiked = likedBy.includes(userId);
+
+                    const newLikes = userHasLiked ? currentLikes - 1 : currentLikes + 1;
+                    const updatedLikedBy = userHasLiked ? likedBy.filter(id => id !== userId) : [...likedBy, userId];
+
+                    lawyerRef.update({
+                        likes: newLikes,
+                        likedBy: updatedLikedBy
                     }).then(() => {
-                        document.getElementById(`${field.slice(0, -1)}-count`).textContent = newValue;
-                        button.classList.add('active');
-                        localStorage.setItem(`${field}_${lawyerId}`, 'true');
+                        button.classList.toggle('active');
+                        const countElement = button.querySelector('span');
+                        countElement.textContent = newLikes;
                     }).catch(error => {
-                        console.error(`Error updating ${field}:`, error);
+                        console.error("Error updating likes: ", error);
                     });
                 }
             }).catch(error => {
-                console.error("Error getting document:", error);
+                console.error("Error getting document: ", error);
+            });
+        }
+
+        function toggleRate(lawyerId, button) {
+            const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+            const userId = getUniqueId(); 
+
+            lawyerRef.get().then(doc => {
+                if (doc.exists) {
+                    const currentRating = doc.data().rating || 0;
+                    const ratedBy = doc.data().ratedBy || [];
+
+                    const userHasRated = ratedBy.includes(userId);
+
+                    const newRating = userHasRated ? currentRating - 1 : currentRating + 1;
+                    const updatedRatedBy = userHasRated ? ratedBy.filter(id => id !== userId) : [...ratedBy, userId];
+
+                    lawyerRef.update({
+                        rating: newRating,
+                        ratedBy: updatedRatedBy
+                    }).then(() => {
+                        button.classList.toggle('active');
+                        const countElement = button.querySelector('span');
+                        countElement.textContent = newRating;
+                    }).catch(error => {
+                        console.error("Error updating rating: ", error);
+                    });
+                }
+            }).catch(error => {
+                console.error("Error getting document: ", error);
+            });
+        }
+
+        function toggleFavorite(lawyerId, button) {
+            const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+            const userId = getUniqueId(); 
+
+            lawyerRef.get().then(doc => {
+                if (doc.exists) {
+                    const currentFavorites = doc.data().favorites || 0;
+                    const favoritedBy = doc.data().favoritedBy || [];
+
+                    const userHasFavorited = favoritedBy.includes(userId);
+
+                    const newFavorites = userHasFavorited ? currentFavorites - 1 : currentFavorites + 1;
+                    const updatedFavoritedBy = userHasFavorited ? favoritedBy.filter(id => id !== userId) : [...favoritedBy, userId];
+
+                    lawyerRef.update({
+                        favorites: newFavorites,
+                        favoritedBy: updatedFavoritedBy
+                    }).then(() => {
+                        button.classList.toggle('active');
+                        const countElement = button.querySelector('span');
+                        countElement.textContent = newFavorites;
+                    }).catch(error => {
+                        console.error("Error updating favorites: ", error);
+                    });
+                }
+            }).catch(error => {
+                console.error("Error getting document: ", error);
             });
         }
 
@@ -401,8 +480,7 @@
                     console.error("Error loading comments:", error);
                 });
         }
+        
     </script>
-</body>
-</html>
 </body>
 </html>
