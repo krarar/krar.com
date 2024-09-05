@@ -6,7 +6,7 @@
     <title>تفاصيل المحامي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
+    <style>
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f7f9fc;
@@ -19,7 +19,6 @@
             justify-content: center;
             min-height: 100vh;
         }
-
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -28,7 +27,6 @@
             margin: 0 auto;
             gap: 20px;
         }
-
         .box {
             width: 100%;
             max-width: 480px;
@@ -38,11 +36,9 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
-
         .box:hover {
             transform: translateY(-5px);
         }
-
         .lawyer-image {
             width: 100%;
             max-height: 300px;
@@ -50,7 +46,6 @@
             border-radius: 10px;
             margin-bottom: 20px;
         }
-
         .info-title {
             color: #3498db;
             font-size: 24px;
@@ -58,28 +53,24 @@
             margin-bottom: 10px;
             text-align: center;
         }
-
         .info-item {
             margin-bottom: 10px;
             font-size: 18px;
             color: #34495e;
         }
-
         .info-item input,
         .info-item textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #bdc3c7;
+            border: 1px solid #b65219;
             border-radius: 5px;
             font-size: 16px;
             box-sizing: border-box;
         }
-
         .info-item textarea {
             resize: vertical;
             height: 80px;
         }
-
         .booking-button {
             display: inline-block;
             padding: 12px 25px;
@@ -94,29 +85,14 @@
             text-align: center;
             width: 100%;
         }
-
         .booking-button:hover {
             background-color: #d35400;
             transform: scale(1.05);
         }
-
-        @media screen and (max-width: 768px) {
-            .box {
-                width: 90%;
-            }
-
-            .info-title {
-                font-size: 22px;
-            }
-
-            .info-item {
-                font-size: 16px;
-
-        }
-         .social-links {
+        .social-links {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
         .social-links a {
             font-size: 28px;
@@ -128,11 +104,78 @@
             color: #2980b9;
             transform: scale(1.1);
         }
-        .button-container {
+        .interaction-buttons {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 30px;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .interaction-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .interaction-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .interaction-btn.active {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .comment-form {
+            display: none;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 1px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+        .comment-form button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .comment-form button:hover {
+            background-color: #2980b9;
+        }
+        #comments-container {
+            margin-top: 20px;
+        }
+        .comment {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .comment p {
+            margin: 0 0 5px 0;
+        }
+        .comment small {
+            color: #666;
+        }
+        @media screen and (max-width: 768px) {
+            .box {
+                width: 90%;
+            }
+            .info-title {
+                font-size: 22px;
+            }
+            .info-item {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -141,16 +184,32 @@
         <!-- مربع المحامي -->
         <div class="box">
             <img id="lawyer-image" class="lawyer-image" src="" alt="صورة المحامي">
+            <div class="social-links">
+                <a id="lawyer-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="interaction-buttons">
+                <button id="like-button" class="interaction-btn">
+                    <i class="fas fa-thumbs-up"></i> إعجاب (<span id="like-count">0</span>)
+                </button>
+                <button id="rate-button" class="interaction-btn">
+                    <i class="fas fa-star"></i> تقييم (<span id="rate-count">0</span>)
+                </button>
+                <button id="comment-button" class="interaction-btn">
+                    <i class="fas fa-comment"></i> تعليق
+                </button>
+            </div>
+            <div class="comment-form">
+                <textarea id="comment-text" placeholder="اكتب تعليقك هنا"></textarea>
+                <button id="submit-comment">إرسال التعليق</button>
+            </div>
+            <div id="comments-container"></div>
             <div class="info-title">بيانات المحامي</div>
             <div id="lawyer-name" class="info-item"></div>
             <div id="lawyer-address" class="info-item"></div>
             <div id="lawyer-phone" class="info-item"></div>
             <div id="lawyer-description" class="info-item"></div>
-        </div>
-          <div class="social-links">
-            <a id="lawyer-whatsapp" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            <a id="lawyer-facebook" href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a id="lawyer-instagram" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
 
         <!-- مربع المستخدم -->
@@ -190,51 +249,10 @@
                 db.collection('lawyers').doc(lawyerId).get().then(doc => {
                     if (doc.exists) {
                         const lawyer = doc.data();
-                        document.getElementById('lawyer-image').src = lawyer.image;
-                        document.getElementById('lawyer-name').textContent = `الاسم: ${lawyer.name}`;
-                        document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
-                        document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
-                        document.getElementById('lawyer-description').textContent = lawyer.description;
-
-                        const whatsappLink = document.getElementById('lawyer-whatsapp');
-                        whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
-                        whatsappLink.title = `تواصل مع ${lawyer.name} عبر الواتساب`;
-
-                        const facebookLink = document.getElementById('lawyer-facebook');
-                        facebookLink.href = lawyer.facebook;
-                        facebookLink.title = `صفحة ${lawyer.name} على فيسبوك`;
-
-                        const instagramLink = document.getElementById('lawyer-instagram');
-                        instagramLink.href = lawyer.instagram;
-                        instagramLink.title = `حساب ${lawyer.name} على إنستغرام`;
-
-                        bookingButton.addEventListener('click', function() {
-                            const userName = document.getElementById('user-name').value;
-                            const userAddress = document.getElementById('user-address').value;
-                            const userPhone = document.getElementById('user-phone').value;
-                            const bookingDetails = document.getElementById('booking-details').value;
-
-                            db.collection('bookings').add({
-                                lawyerId: lawyerId,
-                                lawyerName: lawyer.name,
-                                Image: lawyer.image,
-                                lawyerAddress: lawyer.address,
-                                lawyerPhone: lawyer.phone,
-                                lawyerDescription: lawyer.description,
-                                lawyerWhatsapp: lawyer.whatsapp,
-                                lawyerFacebook: lawyer.facebook,
-                                lawyerInstagram: lawyer.instagram,
-                                userName: userName,
-                                userAddress: userAddress,
-                                userPhone: userPhone,
-                                bookingDetails: bookingDetails,
-                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                            }).then(() => {
-                                alert('تم إرسال الحجز بنجاح!');
-                            }).catch(error => {
-                                console.error("خطأ في إرسال الحجز:", error);
-                            });
-                        });
+                        displayLawyerInfo(lawyer);
+                        setupBookingButton(lawyerId, lawyer);
+                        setupInteractionButtons(lawyerId, lawyer);
+                        loadComments(lawyerId);
                     } else {
                         console.log("لا يوجد محامي بهذا المعرف");
                         document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
@@ -248,6 +266,141 @@
                 document.querySelector('.container').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
             }
         });
+
+        function displayLawyerInfo(lawyer) {
+            document.getElementById('lawyer-image').src = lawyer.image;
+            document.getElementById('lawyer-name').textContent = `الاسم: ${lawyer.name}`;
+            document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
+            document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
+            document.getElementById('lawyer-description').textContent = lawyer.description;
+
+            const whatsappLink = document.getElementById('lawyer-whatsapp');
+            whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
+            whatsappLink.title = `تواصل مع ${lawyer.name} عبر الواتساب`;
+
+            const facebookLink = document.getElementById('lawyer-facebook');
+            facebookLink.href = lawyer.facebook;
+            facebookLink.title = `صفحة ${lawyer.name} على فيسبوك`;
+
+            const instagramLink = document.getElementById('lawyer-instagram');
+            instagramLink.href = lawyer.instagram;
+            instagramLink.title = `حساب ${lawyer.name} على إنستغرام`;
+
+            document.getElementById('like-count').textContent = lawyer.likes || 0;
+            document.getElementById('rate-count').textContent = lawyer.rating || 0;
+        }
+
+        function setupBookingButton(lawyerId, lawyer) {
+            const bookingButton = document.getElementById('booking-button');
+            bookingButton.addEventListener('click', function() {
+                const userName = document.getElementById('user-name').value;
+                const userAddress = document.getElementById('user-address').value;
+                const userPhone = document.getElementById('user-phone').value;
+                const bookingDetails = document.getElementById('booking-details').value;
+
+                db.collection('bookings').add({
+                    lawyerId: lawyerId,
+                    lawyerName: lawyer.name,
+                    Image: lawyer.image,
+                    lawyerAddress: lawyer.address,
+                    lawyerPhone: lawyer.phone,
+                    lawyerDescription: lawyer.description,
+                    lawyerWhatsapp: lawyer.whatsapp,
+                    lawyerFacebook: lawyer.facebook,
+                    lawyerInstagram: lawyer.instagram,
+                    userName: userName,
+                    userAddress: userAddress,
+                    userPhone: userPhone,
+                    bookingDetails: bookingDetails,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    alert('تم إرسال الحجز بنجاح!');
+                }).catch(error => {
+                    console.error("خطأ في إرسال الحجز:", error);
+                });
+            });
+        }
+
+        function setupInteractionButtons(lawyerId, lawyer) {
+            const likeButton = document.getElementById('like-button');
+            const rateButton = document.getElementById('rate-button');
+            const commentButton = document.getElementById('comment-button');
+            const commentForm = document.querySelector('.comment-form');
+            
+            likeButton.addEventListener('click', () => toggleInteraction(lawyerId, 'likes', likeButton));
+            rateButton.addEventListener('click', () => toggleInteraction(lawyerId, 'rating', rateButton));
+            commentButton.addEventListener('click', () => {
+                commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            document.getElementById('submit-comment').addEventListener('click', () => {
+                const commentText = document.getElementById('comment-text').value;
+                if (commentText.trim() !== '') {
+                    addComment(lawyerId, commentText);
+                }
+            });
+        }
+
+        function toggleInteraction(lawyerId, field, button) {
+            if (localStorage.getItem(`${field}_${lawyerId}`)) {
+                alert('لقد قمت بالفعل بهذا الإجراء.');
+                return;
+            }
+            
+            db.collection('lawyers').doc(lawyerId).get().then(doc => {
+                if (doc.exists) {
+                    const currentValue = doc.data()[field] || 0;
+                    const newValue = currentValue + 1;
+                    
+                    db.collection('lawyers').doc(lawyerId).update({
+                        [field]: newValue
+                    }).then(() => {
+                        document.getElementById(`${field.slice(0, -1)}-count`).textContent = newValue;
+                        button.classList.add('active');
+                        localStorage.setItem(`${field}_${lawyerId}`, 'true');
+                    }).catch(error => {
+                        console.error(`Error updating ${field}:`, error);
+                    });
+                }
+            }).catch(error => {
+                console.error("Error getting document:", error);
+            });
+        }
+
+        function addComment(lawyerId, commentText) {
+            db.collection('lawyers').doc(lawyerId).collection('comments').add({
+                text: commentText,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('comment-text').value = '';
+                loadComments(lawyerId);
+                document.querySelector('.comment-form').style.display = 'none';
+            }).catch(error => {
+                console.error("Error adding comment:", error);
+            });
+        }
+
+        function loadComments(lawyerId) {
+            const commentsContainer = document.getElementById('comments-container');
+            commentsContainer.innerHTML = '<h3>التعليقات</h3>';
+            
+            db.collection('lawyers').doc(lawyerId).collection('comments')
+                .orderBy('timestamp', 'desc')
+                .get().then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const comment = doc.data();
+                        const commentElement = document.createElement('div');
+                        commentElement.className = 'comment';
+                        commentElement.innerHTML = `
+                            <p>${comment.text}</p>
+                            <small>${comment.timestamp ? comment.timestamp.toDate().toLocaleString() : 'الآن'}</small>
+                        `;
+                        commentsContainer.appendChild(commentElement);
+                    });
+                }).catch(error => {
+                    console.error("Error loading comments:", error);
+                });
+        }
     </script>
 </body>
 </html>
