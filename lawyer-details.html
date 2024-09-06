@@ -124,6 +124,7 @@
             background-color: #e74c3c;
             color: white;
         }
+        
         .comment-form {
             display: none;
             margin-top: 20px;
@@ -177,9 +178,11 @@
                 font-size: 16px;
             }
         }
+        
     </style>
 </head>
 <body>
+    
     <div class="container">
         <!-- مربع المحامي -->
         <div class="box">
@@ -231,220 +234,312 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
-            authDomain: "messageemeapp.firebaseapp.com",
-            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
-            projectId: "messageemeapp",
-            storageBucket: "messageemeapp.appspot.com",
-            messagingSenderId: "278680662267",
-            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const lawyerId = urlParams.get('id');
-            const bookingButton = document.getElementById('booking-button');
-
-            if (lawyerId) {
-                db.collection('lawyers1').doc(lawyerId).get().then(doc => {
-                    if (doc.exists) {
-                        const lawyer = doc.data();
-                        displayLawyerInfo(lawyer);
-                        setupBookingButton(lawyerId, lawyer);
-                        setupInteractionButtons(lawyerId, lawyer);
-                        loadComments(lawyerId);
-                    } else {
-                        console.log("لا يوجد محامي بهذا المعرف");
-                        document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
-                    }
-                }).catch(error => {
-                    console.error("خطأ في استرجاع بيانات المحامي:", error);
-                    document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
-                });
-            } else {
-                console.log("لم يتم تحديد معرف المحامي");
-                document.querySelector('.container').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
+        
+            // Initialize Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+                authDomain: "messageemeapp.firebaseapp.com",
+                databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+                projectId: "messageemeapp",
+                storageBucket: "messageemeapp.appspot.com",
+                messagingSenderId: "278680662267",
+                appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+            };
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+        
+            document.addEventListener('DOMContentLoaded', function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const lawyerId = urlParams.get('id');
+                const bookingButton = document.getElementById('booking-button');
+        
+                if (lawyerId) {
+                    db.collection('lawyers1').doc(lawyerId).get().then(doc => {
+                        if (doc.exists) {
+                            const lawyer = doc.data();
+                            displayLawyerInfo(lawyer);
+                            setupBookingButton(lawyerId, lawyer);
+                            setupInteractionButtons(lawyerId, lawyer);
+                            loadComments(lawyerId);
+                            checkButtonState(lawyerId); // Check button states on load
+                        } else {
+                            document.querySelector('.container').innerHTML = '<p>عذراً، لم يتم العثور على بيانات لهذا المحامي.</p>';
+                        }
+                    }).catch(error => {
+                        console.error("خطأ في استرجاع بيانات المحامي:", error);
+                        document.querySelector('.container').innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى لاحقاً.</p>';
+                    });
+                } else {
+                    document.querySelector('.container').innerHTML = '<p>لم يتم تحديد المحامي المطلوب. يرجى العودة واختيار محامي من القائمة.</p>';
+                }
+            });
+        
+            function displayLawyerInfo(lawyer) {
+                document.getElementById('lawyer-image').src = lawyer.image;
+                document.getElementById('lawyer-name').textContent = `الاسم: ${lawyer.name}`;
+                document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
+                document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
+                document.getElementById('lawyer-description').textContent = lawyer.description;
+        
+                document.getElementById('lawyer-whatsapp').href = `https://wa.me/${lawyer.whatsapp}`;
+                document.getElementById('lawyer-facebook').href = lawyer.facebook;
+                document.getElementById('lawyer-instagram').href = lawyer.instagram;
+        
+                document.getElementById('like-count').textContent = lawyer.likes || 0;
+                document.getElementById('rate-count').textContent = lawyer.rating || 0;
+                document.getElementById('favorite-count').textContent = lawyer.favorites || 0;
             }
-        });
-
-        function displayLawyerInfo(lawyer) {
-            document.getElementById('lawyer-image').src = lawyer.image;
-            document.getElementById('lawyer-name').textContent = `الاسم: ${lawyer.name}`;
-            document.getElementById('lawyer-address').textContent = `العنوان: ${lawyer.address}`;
-            document.getElementById('lawyer-phone').textContent = `الهاتف: ${lawyer.phone}`;
-            document.getElementById('lawyer-description').textContent = lawyer.description;
-
-            const whatsappLink = document.getElementById('lawyer-whatsapp');
-            whatsappLink.href = `https://wa.me/${lawyer.whatsapp}`;
-            whatsappLink.title = `تواصل مع ${lawyer.name} عبر الواتساب`;
-
-            const facebookLink = document.getElementById('lawyer-facebook');
-            facebookLink.href = lawyer.facebook;
-            facebookLink.title = `صفحة ${lawyer.name} على فيسبوك`;
-
-            const instagramLink = document.getElementById('lawyer-instagram');
-            instagramLink.href = lawyer.instagram;
-            instagramLink.title = `حساب ${lawyer.name} على إنستغرام`;
-
-            document.getElementById('like-count').textContent = lawyer.likes || 0;
-            document.getElementById('rate-count').textContent = lawyer.rating || 0;
-            document.getElementById('favorite-count').textContent = lawyer.favorites || 0;
-        }
-
-        function setupBookingButton(lawyerId, lawyer) {
-            const bookingButton = document.getElementById('booking-button');
-            bookingButton.addEventListener('click', function() {
-                const userName = document.getElementById('user-name').value;
-                const userAddress = document.getElementById('user-address').value;
-                const userPhone = document.getElementById('user-phone').value;
-                const bookingDetails = document.getElementById('booking-details').value;
-
-                db.collection('bookings').add({
+        
+            function setupBookingButton(lawyerId, lawyer) {
+                document.getElementById('booking-button').addEventListener('click', function() {
+                    const userName = document.getElementById('user-name').value;
+                    const userAddress = document.getElementById('user-address').value;
+                    const userPhone = document.getElementById('user-phone').value;
+                    const bookingDetails = document.getElementById('booking-details').value;
+        
+                    if (userName && userAddress && userPhone && bookingDetails) {
+                        db.collection('bookings').add({
+                            lawyerId: lawyerId,
+                            lawyerName: lawyer.name,
+                            image: lawyer.image,
+                            address: lawyer.address,
+                            phone: lawyer.phone,
+                            description: lawyer.description,
+                            whatsapp: lawyer.whatsapp,
+                            facebook: lawyer.facebook,
+                            instagram: lawyer.instagram,
+                            userName: userName,
+                            userAddress: userAddress,
+                            userPhone: userPhone,
+                            bookingDetails: bookingDetails,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            alert('تم إرسال الحجز بنجاح!');
+                        }).catch(error => {
+                            console.error("خطأ في إرسال الحجز:", error);
+                        });
+                    } else {
+                        alert('يرجى ملء جميع الحقول قبل إرسال الحجز.');
+                    }
+                });
+            }
+        
+            function setupInteractionButtons(lawyerId, lawyer) {
+                const likeButton = document.getElementById('like-button');
+                const rateButton = document.getElementById('rate-button');
+                const favoriteButton = document.getElementById('favorite-button');
+                const commentButton = document.getElementById('comment-button');
+                const commentForm = document.querySelector('.comment-form');
+                
+                likeButton.addEventListener('click', () => toggleLike(lawyerId, likeButton));
+                rateButton.addEventListener('click', () => toggleRate(lawyerId, rateButton));
+                favoriteButton.addEventListener('click', () => toggleFavorite(lawyerId, favoriteButton));
+                commentButton.addEventListener('click', () => {
+                    commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+                });
+        
+                document.getElementById('submit-comment').addEventListener('click', () => {
+                    const commentText = document.getElementById('comment-text').value;
+                    if (commentText.trim() !== '') {
+                        addComment(lawyerId, commentText);
+                    } else {
+                        alert('يرجى كتابة تعليق قبل الإرسال.');
+                    }
+                });
+            }
+        
+            function loadComments(lawyerId) {
+                const commentsContainer = document.getElementById('comments-container');
+                db.collection('comments').where('lawyerId', '==', lawyerId).orderBy('timestamp', 'desc').get().then(querySnapshot => {
+                    commentsContainer.innerHTML = ''; // Clear existing comments
+                    querySnapshot.forEach(doc => {
+                        const comment = doc.data();
+                        const commentElement = document.createElement('div');
+                        commentElement.classList.add('comment');
+                        commentElement.innerHTML = `
+                            <p>${comment.text}</p>
+                            <small>${comment.userName || 'مجهول'} - ${new Date(comment.timestamp.toDate()).toLocaleString()}</small>
+                        `;
+                        commentsContainer.appendChild(commentElement);
+                    });
+                }).catch(error => {
+                    console.error("Error loading comments: ", error);
+                });
+            }
+        
+            function addComment(lawyerId, commentText) {
+                const userName = 'مجهول'; // You can replace this with the user's name if you have a login system
+                db.collection('comments').add({
                     lawyerId: lawyerId,
-                    lawyerName: lawyer.name,
-                    Image: lawyer.image,
-                    lawyerAddress: lawyer.address,
-                    lawyerPhone: lawyer.phone,
-                    lawyerDescription: lawyer.description,
-                    lawyerWhatsapp: lawyer.whatsapp,
-                    lawyerFacebook: lawyer.facebook,
-                    lawyerInstagram: lawyer.instagram,
+                    text: commentText,
                     userName: userName,
-                    userAddress: userAddress,
-                    userPhone: userPhone,
-                    bookingDetails: bookingDetails,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert('تم إرسال الحجز بنجاح!');
+                    document.getElementById('comment-text').value = ''; // Clear comment input
+                    loadComments(lawyerId); // Reload comments
                 }).catch(error => {
-                    console.error("خطأ في إرسال الحجز:", error);
+                    console.error("Error adding comment: ", error);
                 });
-            });
-        }
-
-        function setupInteractionButtons(lawyerId, lawyer) {
-            const likeButton = document.getElementById('like-button');
-            const rateButton = document.getElementById('rate-button');
-            const favoriteButton = document.getElementById('favorite-button');
-            const commentButton = document.getElementById('comment-button');
-            const commentForm = document.querySelector('.comment-form');
-            
-            likeButton.addEventListener('click', () => toggleLike(lawyerId, likeButton));
-            rateButton.addEventListener('click', () => toggleRate(lawyerId, rateButton));
-            favoriteButton.addEventListener('click', () => toggleFavorite(lawyerId, favoriteButton));
-            commentButton.addEventListener('click', () => {
-                commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-            });
-            
-            document.getElementById('submit-comment').addEventListener('click', () => {
-                const commentText = document.getElementById('comment-text').value;
-                if (commentText.trim() !== '') {
-                    addComment(lawyerId, commentText);
-                }
-            });
-        }
-
-        function getUniqueId() {
-            let uniqueId = localStorage.getItem('uniqueId');
-            if (!uniqueId) {
-                uniqueId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
-                localStorage.setItem('uniqueId', uniqueId);
             }
-            return uniqueId;
-        }
-
-        function toggleLike(lawyerId, button) {
-            const lawyerRef = db.collection('lawyers1').doc(lawyerId);
-            const userId = getUniqueId(); 
-
-            lawyerRef.get().then(doc => {
-                if (doc.exists) {
-                    const currentLikes = doc.data().likes || 0;
-                    const likedBy = doc.data().likedBy || []; 
-
-                    const userHasLiked = likedBy.includes(userId);
-
-                    const newLikes = userHasLiked ? currentLikes - 1 : currentLikes + 1;
-                    const updatedLikedBy = userHasLiked ? likedBy.filter(id => id !== userId) : [...likedBy, userId];
-
-                    lawyerRef.update({
-                        likes: newLikes,
-                        likedBy: updatedLikedBy
-                    }).then(() => {
-                        button.classList.toggle('active');
-                        const countElement = button.querySelector('span');
-                        countElement.textContent = newLikes;
-                    }).catch(error => {
-                        console.error("Error updating likes: ", error);
-                    });
+        
+            function getUniqueId() {
+                let uniqueId = localStorage.getItem('uniqueId');
+                if (!uniqueId) {
+                    uniqueId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+                    localStorage.setItem('uniqueId', uniqueId);
                 }
-            }).catch(error => {
-                console.error("Error getting document: ", error);
-            });
-        }
-
-        function toggleRate(lawyerId, button) {
-            const lawyerRef = db.collection('lawyers1').doc(lawyerId);
-            const userId = getUniqueId(); 
-
-            lawyerRef.get().then(doc => {
-                if (doc.exists) {
-                    const currentRating = doc.data().rating || 0;
-                    const ratedBy = doc.data().ratedBy || [];
-
-                    const userHasRated = ratedBy.includes(userId);
-
-                    const newRating = userHasRated ? currentRating - 1 : currentRating + 1;
-                    const updatedRatedBy = userHasRated ? ratedBy.filter(id => id !== userId) : [...ratedBy, userId];
-
-                    lawyerRef.update({
-                        rating: newRating,
-                        ratedBy: updatedRatedBy
-                    }).then(() => {
-                        button.classList.toggle('active');
-                        const countElement = button.querySelector('span');
-                        countElement.textContent = newRating;
-                    }).catch(error => {
-                        console.error("Error updating rating: ", error);
-                    });
+                return uniqueId;
+            }
+        
+            function toggleLike(lawyerId, button) {
+                const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+                const userId = getUniqueId(); 
+                
+                lawyerRef.get().then(doc => {
+                    if (doc.exists) {
+                        const currentLikes = doc.data().likes || 0;
+                        const likedBy = doc.data().likedBy || [];
+        
+                        const userHasLiked = likedBy.includes(userId);
+        
+                        const newLikes = userHasLiked ? currentLikes - 1 : currentLikes + 1;
+                        const updatedLikedBy = userHasLiked ? likedBy.filter(id => id !== userId) : [...likedBy, userId];
+        
+                        lawyerRef.update({
+                            likes: newLikes,
+                            likedBy: updatedLikedBy
+                        }).then(() => {
+                            button.classList.toggle('active');
+                            const countElement = button.querySelector('span');
+                            countElement.textContent = newLikes;
+        
+                            if (userHasLiked) {
+                                localStorage.removeItem(`liked_${lawyerId}`);
+                            } else {
+                                localStorage.setItem(`liked_${lawyerId}`, 'true');
+                            }
+                        }).catch(error => {
+                            console.error("Error updating likes: ", error);
+                        });
+                    }
+                }).catch(error => {
+                    console.error("Error fetching lawyer data: ", error);
+                });
+            }
+        
+            function toggleRate(lawyerId, button) {
+                const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+                const userId = getUniqueId(); 
+                
+                lawyerRef.get().then(doc => {
+                    if (doc.exists) {
+                        const currentRating = doc.data().rating || 0;
+                        const ratedBy = doc.data().ratedBy || [];
+        
+                        const userHasRated = ratedBy.includes(userId);
+        
+                        const newRating = userHasRated ? currentRating - 1 : currentRating + 1;
+                        const updatedRatedBy = userHasRated ? ratedBy.filter(id => id !== userId) : [...ratedBy, userId];
+        
+                        lawyerRef.update({
+                            rating: newRating,
+                            ratedBy: updatedRatedBy
+                        }).then(() => {
+                            button.classList.toggle('active');
+                            const countElement = button.querySelector('span');
+                            countElement.textContent = newRating;
+        
+                            if (userHasRated) {
+                                localStorage.removeItem(`rated_${lawyerId}`);
+                            } else {
+                                localStorage.setItem(`rated_${lawyerId}`, 'true');
+                            }
+                        }).catch(error => {
+                            console.error("Error updating rating: ", error);
+                        });
+                    }
+                }).catch(error => {
+                    console.error("Error fetching lawyer data: ", error);
+                });
+            }
+        
+            function toggleFavorite(lawyerId, button) {
+                const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+                const userId = getUniqueId(); 
+                
+                lawyerRef.get().then(doc => {
+                    if (doc.exists) {
+                        const currentFavorites = doc.data().favorites || 0;
+                        const favoritedBy = doc.data().favoritedBy || [];
+        
+                        const userHasFavorited = favoritedBy.includes(userId);
+        
+                        const newFavorites = userHasFavorited ? currentFavorites - 1 : currentFavorites + 1;
+                        const updatedFavoritedBy = userHasFavorited ? favoritedBy.filter(id => id !== userId) : [...favoritedBy, userId];
+        
+                        lawyerRef.update({
+                            favorites: newFavorites,
+                            favoritedBy: updatedFavoritedBy
+                        }).then(() => {
+                            button.classList.toggle('active');
+                            const countElement = button.querySelector('span');
+                            countElement.textContent = newFavorites;
+        
+                            if (userHasFavorited) {
+                                localStorage.removeItem(`favorited_${lawyerId}`);
+                            } else {
+                                localStorage.setItem(`favorited_${lawyerId}`, 'true');
+                            }
+                        }).catch(error => {
+                            console.error("Error updating favorites: ", error);
+                        });
+                    }
+                }).catch(error => {
+                    console.error("Error fetching lawyer data: ", error);
+                });
+            }
+        
+            function checkButtonState(lawyerId) {
+                const likeButton = document.getElementById('like-button');
+                const rateButton = document.getElementById('rate-button');
+                const favoriteButton = document.getElementById('favorite-button');
+                
+                if (localStorage.getItem(`liked_${lawyerId}`)) {
+                    likeButton.classList.add('active');
                 }
-            }).catch(error => {
-                console.error("Error getting document: ", error);
-            });
-        }
-
-        function toggleFavorite(lawyerId, button) {
-            const lawyerRef = db.collection('lawyers1').doc(lawyerId);
-            const userId = getUniqueId(); 
-
-            lawyerRef.get().then(doc => {
-                if (doc.exists) {
-                    const currentFavorites = doc.data().favorites || 0;
-                    const favoritedBy = doc.data().favoritedBy || [];
-
-                    const userHasFavorited = favoritedBy.includes(userId);
-
-                    const newFavorites = userHasFavorited ? currentFavorites - 1 : currentFavorites + 1;
-                    const updatedFavoritedBy = userHasFavorited ? favoritedBy.filter(id => id !== userId) : [...favoritedBy, userId];
-
-                    lawyerRef.update({
-                        favorites: newFavorites,
-                        favoritedBy: updatedFavoritedBy
-                    }).then(() => {
-                        button.classList.toggle('active');
-                        const countElement = button.querySelector('span');
-                        countElement.textContent = newFavorites;
-                    }).catch(error => {
-                        console.error("Error updating favorites: ", error);
-                    });
+                if (localStorage.getItem(`rated_${lawyerId}`)) {
+                    rateButton.classList.add('active');
                 }
-            }).catch(error => {
-                console.error("Error getting document: ", error);
-            });
-        }
+                if (localStorage.getItem(`favorited_${lawyerId}`)) {
+                    favoriteButton.classList.add('active');
+                }
+            }
+       
+        
+            // التحقق من حالة زر المفضلة
+            const favoriteButton = document.getElementById('favorite-button');
+            if (localStorage.getItem(`favorited_${lawyerId}`)) {
+                favoriteButton.classList.add('active');
+            }
+        
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lawyerId = urlParams.get('id');
+        
+            if (lawyerId) {
+                checkButtonState(lawyerId); // استرجاع حالة الأزرار عند تحميل الصفحة
+        
+                const likeButton = document.getElementById('like-button');
+                const rateButton = document.getElementById('rate-button');
+                const favoriteButton = document.getElementById('favorite-button');
+        
+                likeButton.addEventListener('click', () => toggleLike(lawyerId, likeButton));
+                rateButton.addEventListener('click', () => toggleRate(lawyerId, rateButton));
+                favoriteButton.addEventListener('click', () => toggleFavorite(lawyerId, favoriteButton));
+            }
+        });
+        
 
         function addComment(lawyerId, commentText) {
             db.collection('lawyers1').doc(lawyerId).collection('comments').add({
