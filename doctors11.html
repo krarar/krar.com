@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الاطباء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+     :root {
+    --primary-color: #3498db; /* اللون الأساسي */
+    --secondary-color: #2ecc71; /* اللون الثانوي */
+    --background-color: #f9fbfd; /* لون خلفية الصفحة */
+    --text-color: #2c3e50; /* لون النص */
+    --card-color: #ffffff; /* لون الخلفيات لعناصر البطاقة */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* لون الظل */
+    --image-shadow: rgba(0, 0, 0, 0.2); /* ظل للصور */
+    --modal-background: #ffffff; /* لون خلفية النوافذ المنبثقة */
+    --modal-border: #dbdbdb; /* لون حدود النوافذ المنبثقة */
+    --modal-shadow: rgba(0, 0, 0, 0.15); /* ظل للنوافذ المنبثقة */
+}
+
+.like-button.active,
+.rate-button.active,
+.favorite-button.active {
+    color: #FF4500; /* لون مميز عند التفعيل */
+}
+
+body {
+    font-family: 'Tajawal', sans-serif; /* الخط المستخدم */
+    margin: 0; /* إزالة الهوامش الافتراضية */
+    padding: 0; /* إزالة الحواف الداخلية الافتراضية */
+    box-sizing: border-box; /* إعداد نمط الصندوق ليشمل الحدود والحواف */
+    background-color: var(--background-color); /* تطبيق لون الخلفية */
+    color: var(--text-color); /* تطبيق لون النص */
+}
+
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* تدرج الألوان للخلفية */
+    color: white; /* لون النص في الترويسة */
+    box-shadow: 0 2px 10px var(--shadow-color); /* تطبيق الظل على الترويسة */
+    position: sticky; /* تثبيت الترويسة في أعلى الصفحة */
+    top: 0; /* تحديد مكان التثبيت */
+    z-index: 1000; /* ضمان ظهور الترويسة فوق العناصر الأخرى */
+}
+
+.title-bar {
+    display: flex; /* عرض محتويات الترويسة بجانب بعضها */
+    justify-content: space-between; /* توزيع العناصر بالتساوي */
+    align-items: center; /* محاذاة العناصر بشكل مركزي عمودياً */
+    padding: 15px 20px; /* مسافات حول العناصر داخل الترويسة */
+}
+
+.title-bar h1 {
+    margin: 0; /* إزالة الهوامش */
+    font-size: 24px; /* حجم الخط */
+    font-weight: 700; /* كثافة الخط */
+}
+
+.title-bar button {
+    background: none; /* إزالة الخلفية الافتراضية */
+    border: none; /* إزالة الحدود الافتراضية */
+    cursor: pointer; /* تحويل مؤشر الفأرة إلى شكل اليد عند التمرير */
+    color: white; /* لون النص للأزرار */
+    font-size: 20px; /* حجم النص للأزرار */
+    transition: transform 0.3s ease; /* إضافة تأثير التحويل للأزرار */
+}
+
+.title-bar button:hover {
+    transform: scale(1.1); /* تكبير الزر قليلاً عند التمرير */
+}
+
+lawyer-likes {
+    display: flex; /* عرض العناصر بشكل أفقي */
+    align-items: center; /* محاذاة العناصر في الوسط عمودياً */
+    margin-bottom: 36px; /* مسافة أسفل القسم */
+}
+
+.like-section {
+    margin-top: 20px; /* مسافة أعلى القسم */
+}
+
+.like-button {
+    background-color: #f0f0f0; /* لون الخلفية للأزرار */
+    border: none; /* إزالة الحدود */
+    padding: 10px 10px; /* مسافات داخلية للأزرار */
+    border-radius: 10px; /* حواف مستديرة للأزرار */
+    cursor: pointer; /* تغيير المؤشر عند التمرير فوق الزر */
+    transition: background-color 0.3s; /* تأثير تغيير اللون على الأزرار */
+}
+
+.like-button:hover {
+    background-color: #e0e0e0; /* تغيير لون الخلفية عند التمرير فوق الزر */
+}
+
+#filter-section {
+    background-color: var(--card-color); /* لون خلفية القسم */
+    padding: 15px; /* مسافات داخلية للقسم */
+    margin: 10px 20px; /* مسافات حول القسم */
+    border-radius: 10px; /* حواف مستديرة للقسم */
+    box-shadow: 0 2px 5px var(--shadow-color); /* إضافة ظل حول القسم */
+    display: flex; /* عرض العناصر بشكل أفقي */
+    justify-content: space-between; /* توزيع العناصر بالتساوي في القسم */
+}
+
+
+      #filter-type {
+    width: 30%; /* عرض حقل نوع الفلتر */
+    padding: 10px; /* مسافات داخلية للحقل */
+    border: 1px solid var(--primary-color); /* إطار بلون أساسي */
+    border-radius: 5px; /* زوايا مستديرة */
+    font-family: 'Tajawal', sans-serif; /* الخط المستخدم */
+}
+
+#filter-input {
+    width: 65%; /* عرض حقل الإدخال */
+    padding: 10px; /* مسافات داخلية للحقل */
+    border: 1px solid var(--primary-color); /* إطار بلون أساسي */
+    border-radius: 5px; /* زوايا مستديرة */
+    font-family: 'Tajawal', sans-serif; /* الخط المستخدم */
+}
+
+.close-sidebar-button {
+    position: absolute; /* تموضع الزر بشكل مطلق */
+    top: 20px; /* تحديد المسافة من الأعلى */
+    left: 20px; /* تحديد المسافة من اليسار */
+    background: none; /* إزالة الخلفية الافتراضية */
+    border: none; /* إزالة الإطار */
+    color: var(--text-color); /* لون النص */
+    font-size: 20px; /* حجم النص */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+}
+
+#sidebar nav ul {
+    list-style: none; /* إزالة النقاط من القائمة */
+    padding: 0; /* إزالة المسافات الداخلية */
+}
+
+#sidebar nav ul li {
+    padding: 15px 25px; /* مسافات داخلية للعناصر */
+    border-bottom: 1px solid var(--background-color); /* إضافة خط سفلي للعناصر */
+}
+
+#sidebar nav ul li a {
+    color: var(--text-color); /* لون النص للروابط */
+    text-decoration: none; /* إزالة التسطير الافتراضي للروابط */
+    font-size: 18px; /* حجم النص للروابط */
+    display: flex; /* عرض الروابط بجانب الأيقونات */
+    align-items: center; /* محاذاة النص عمودياً مع الأيقونات */
+}
+
+#sidebar nav ul li a i {
+    margin-left: 15px; /* مسافة بين الأيقونة والنص */
+    font-size: 20px; /* حجم الأيقونة */
+    color: var(--primary-color); /* لون الأيقونة */
+}
+
+#sidebar {
+    position: fixed; /* تموضع الشريط الجانبي بشكل ثابت */
+    top: 0; /* بداية من الأعلى */
+    right: 0; /* على الجانب الأيمن من الصفحة */
+    width: 280px; /* عرض الشريط الجانبي */
+    height: 100%; /* امتداد الشريط على كامل الصفحة */
+    background-color: var(--card-color); /* لون خلفية الشريط الجانبي */
+    box-shadow: -2px 0 10px var(--shadow-color); /* إضافة ظل على الجانب الأيسر للشريط */
+    padding-top: 70px; /* مسافة من الأعلى لترك مساحة للترويسة */
+    transform: translateX(100%); /* إخفاء الشريط الجانبي في البداية */
+    transition: transform 0.3s ease-in-out; /* انتقال سلس عند عرض الشريط */
+    z-index: 1001; /* ضمان ظهور الشريط فوق العناصر الأخرى */
+}
+
+#sidebar.active {
+    transform: translateX(0); /* إظهار الشريط الجانبي عند تفعيله */
+}
+
+#cancel-button {
+    background-color: var(--card-color); /* لون الخلفية للزر */
+    color: var(--text-color); /* لون النص */
+    border: 1px solid var(--text-color); /* إطار الزر بلون النص */
+    margin-top: 5px; /* مسافة من الأعلى */
+}
+
+#cancel-button:hover {
+    background-color: var(--text-color); /* تغيير لون الخلفية عند التمرير */
+    color: var(--card-color); /* تغيير لون النص عند التمرير */
+}
+
+#search-container {
+    position: fixed; /* تموضع الحاوية بشكل ثابت */
+    top: 0; /* بداية من الأعلى */
+    left: 0; /* بداية من اليسار */
+    width: 100%; /* تغطية كامل العرض */
+    height: 100%; /* تغطية كامل الارتفاع */
+    background-color: rgba(0, 0, 0, 0.8); /* خلفية داكنة شفافة */
+    display: flex; /* عرض العناصر بشكل أفقي */
+    justify-content: center; /* توسيط العناصر أفقياً */
+    align-items: flex-start; /* توسيط العناصر عمودياً */
+    padding-top: 100px; /* مسافة من الأعلى لإبعاد الحقل عن الحافة */
+    z-index: 1002; /* ضمان ظهور الحاوية فوق العناصر الأخرى */
+    opacity: 0; /* إخفاء الحاوية افتراضياً */
+    visibility: hidden; /* إخفاء الحاوية افتراضياً */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* انتقال سلس للظهور */
+}
+
+#search-container.active {
+    opacity: 1; /* إظهار الحاوية عند التفعيل */
+    visibility: visible; /* جعل الحاوية مرئية */
+}
+
+#search-input {
+    width: 80%; /* عرض حقل البحث */
+    max-width: 600px; /* أقصى عرض للحقل */
+    padding: 15px; /* مسافات داخلية للحقل */
+    border: none; /* إزالة الحدود */
+    border-radius: 30px; /* زوايا مستديرة للحقل */
+    font-size: 18px; /* حجم الخط */
+    background-color: white; /* لون خلفية الحقل */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* ظل خفيف للحقل */
+    transition: all 0.3s ease; /* انتقال سلس لتغييرات الحقل */
+}
+
+#search-input:focus {
+    outline: none; /* إزالة التحديد الافتراضي */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* زيادة الظل عند التركيز */
+}
+
+#close-search {
+    position: absolute; /* تموضع الزر بشكل مطلق */
+    top: 20px; /* المسافة من الأعلى */
+    right: 20px; /* المسافة من اليمين */
+    font-size: 30px; /* حجم النص */
+    color: white; /* لون النص */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+}
+
+.form-container {
+    display: none; /* إخفاء النموذج افتراضياً */
+    position: fixed; /* تموضع النموذج بشكل ثابت */
+    top: 50%; /* توسيط النموذج عمودياً */
+    left: 50%; /* توسيط النموذج أفقياً */
+    transform: translate(-50%, -50%); /* توسيط دقيق للنموذج */
+    background-color: var(--card-color); /* لون خلفية النموذج */
+    padding: 20px; /* مسافات داخلية للنموذج */
+    border-radius: 10px; /* زوايا مستديرة للنموذج */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* إضافة ظل للنموذج */
+    z-index: 1001; /* ضمان ظهور النموذج فوق العناصر الأخرى */
+    width: 90%; /* عرض النموذج */
+    max-width: 500px; /* أقصى عرض للنموذج */
+}
+
+.form-container form {
+    display: flex; /* عرض العناصر داخل النموذج بشكل عمودي */
+    flex-direction: column; /* ترتيب العناصر عمودياً */
+}
+
+.form-container form input,
+.form-container form textarea {
+    margin-bottom: 15px; /* مسافة أسفل كل حقل */
+    padding: 10px; /* مسافات داخلية للحقل */
+    border: 1px solid var(--text-color); /* إطار الحقل */
+    border-radius: 5px; /* زوايا مستديرة للحقل */
+    font-family: 'Tajawal', sans-serif; /* الخط المستخدم */
+}
+
+.form-container form button {
+    padding: 10px; /* مسافات داخلية للزر */
+    border: none; /* إزالة الحدود */
+    border-radius: 5px; /* زوايا مستديرة للزر */
+    background-color: var(--primary-color); /* لون خلفية الزر */
+    color: white; /* لون النص داخل الزر */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+    font-size: 16px; /* حجم النص */
+    transition: background-color 0.3s ease; /* انتقال سلس لتغيير لون الخلفية */
+}
+
+.form-container form button:hover {
+    background-color: var(--secondary-color); /* تغيير لون الخلفية عند التمرير */
+}
+
+.close {
+    color: #aaa; /* لون النص */
+    float: left; /* تموضع النص إلى اليسار */
+    font-size: 28px; /* حجم النص */
+    font-weight: bold; /* سمك النص */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* تغيير لون النص عند التمرير أو التركيز */
+    text-decoration: none; /* إزالة أي تأثيرات نصية */
+}
+
+.modal-image {
+    width: 100%; /* عرض الصورة */
+    max-height: 300px; /* أقصى ارتفاع للصورة */
+    object-fit: cover; /* ضبط الصورة داخل الحاوية */
+    border-radius: 10px; /* زوايا مستديرة للصورة */
+    margin-bottom: 15px; /* مسافة أسفل الصورة */
+}
+
+.modal-content h2 {
+    margin-top: 0; /* إزالة المسافة العلوية للعنوان */
+}
+
+.modal-content p {
+    margin: 5px 0; /* مسافات داخلية صغيرة للفقرة */
+}
+
+.modal-links {
+    display: flex; /* عرض الروابط بشكل أفقي */
+    justify-content: space-around; /* توزيع الروابط بالتساوي */
+    margin-top: 15px; /* مسافة علوية بعد النص */
+}
+
+.modal-links a {
+    text-decoration: none; /* إزالة التسطير الافتراضي للروابط */
+    color: var(--text-color); /* لون الروابط */
+}
+
+.modal-links i {
+    font-size: 24px; /* حجم الأيقونة */
+    margin: 0 5px; /* مسافة بين الأيقونات */
+}
+
+.title-bar {
+    display: flex; /* عرض الترويسة بشكل أفقي */
+    justify-content: space-between; /* توزيع العناصر بالتساوي */
+    align-items: center; /* محاذاة العناصر عمودياً */
+    padding: 15px 20px; /* مسافات داخلية للترويسة */
+}
+
+.title-bar h1 {
+    margin: 0; /* إزالة المسافة الافتراضية */
+    font-size: 24px; /* حجم النص */
+    font-weight: 700; /* سمك النص */
+}
+
+.title-bar button {
+    background: none; /* إزالة خلفية الزر */
+    border: none; /* إزالة الحدود */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+    color: white; /* لون النص */
+    font-size: 20px; /* حجم النص */
+    transition: transform 0.3s ease; /* انتقال سلس عند تغيير الحجم */
+}
+
+
+       .title-bar button:hover {
+    transform: scale(1.1); /* تكبير الزر عند التمرير */
+}
+
+lawyer-likes {
+    display: flex;
+    align-items: center; /* محاذاة الأيقونات والنص بشكل مركزي */
+    margin-bottom: 5px; /* مسافة صغيرة أسفل الأيقونات */
+}
+
+.like-count {
+    margin-right: 50px; /* مسافة بين العدادات */
+}
+
+.like-button {
+    background-color: #2906eb; /* لون خلفية الزر */
+    color: white; /* لون النص داخل الزر */
+    border: none; /* إزالة الحدود */
+    padding: 0px 15px; /* مسافات داخلية للزر */
+    border-radius: 20px; /* زوايا مستديرة للزر */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+}
+
+.like-button, .rate-button, .favorite-button {
+    background: none; /* إزالة خلفية الأيقونات */
+    color: #008ada; /* لون الأيقونات الأساسي */
+    border: none; /* إزالة الحدود */
+    font-size: 24px; /* حجم الأيقونة */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+    transition: color 0.3s ease, transform 0.3s ease; /* انتقال سلس لتغيير الألوان والتكبير */
+    display: flex; /* عرض الأيقونات والنصوص بشكل أفقي */
+    align-items: center; /* محاذاة الأيقونات والنصوص بشكل مركزي */
+    margin-right: 10px; /* مسافة بين الأيقونة والعداد */
+}
+
+.like-button:hover, .rate-button:hover, .favorite-button:hover {
+    color: #FF4500; /* تغيير لون الأيقونة عند التمرير */
+    transform: scale(1.2); /* تكبير الأيقونة عند التمرير */
+}
+
+.like-button.active, .rate-button.active, .favorite-button.active {
+    color: #f30a0a; /* تغيير لون الأيقونة عند التفعيل */
+    transform: scale(1.2); /* تكبير الأيقونة عند التفعيل */
+}
+
+.like-button:disabled, .rate-button:disabled, .favorite-button:disabled {
+    color: #cccccc; /* لون الأيقونة عند التعطيل */
+    cursor: not-allowed; /* منع التفاعل مع الأيقونة عند التعطيل */
+    transform: none; /* إلغاء التكبير عند التعطيل */
+}
+
+.lawyer-likes {
+    display: flex;
+    justify-content: space-around; /* توزيع الأيقونات بالتساوي */
+    margin-top: 10px; /* مسافة أعلى القسم */
+}
+
+.count-number {
+    margin-left: 5px; /* مسافة بين الأيقونة والعداد */
+    font-size: 18px; /* حجم النص */
+    color: #08e200; /* لون العداد */
+}
+
+#bottom-toolbar {
+    position: fixed; /* تثبيت شريط الأدوات في أسفل الصفحة */
+    bottom: 0; /* تموضعه في الأسفل */
+    left: 0; /* التمركز من اليسار */
+    width: 100%; /* يغطي عرض الشاشة بالكامل */
+    background-color: var(--card-color); /* لون خلفية شريط الأدوات */
+    display: flex; /* عرض الأيقونات بشكل أفقي */
+    justify-content: space-around; /* توزيع الأيقونات بالتساوي */
+    padding: 10px 0; /* مسافات داخلية للشريط */
+    box-shadow: 0 -2px 10px var(--shadow-color); /* إضافة ظل للشريط */
+}
+
+#bottom-toolbar a {
+    color: var(--text-color); /* لون النص */
+    text-decoration: none; /* إزالة التسطير تحت النص */
+    font-size: 14px; /* حجم النص */
+    display: flex; /* عرض النصوص والأيقونات بشكل عمودي */
+    flex-direction: column; /* ترتيب العناصر عمودياً */
+    align-items: center; /* محاذاة العناصر في الوسط */
+}
+
+#bottom-toolbar i {
+    font-size: 24px; /* حجم الأيقونة */
+    margin-bottom: 5px; /* مسافة أسفل الأيقونة */
+    color: var(--primary-color); /* لون الأيقونة */
+}
+
+#lawyers-list {
+    display: flex; /* عرض البطاقات بشكل أفقي */
+    flex-wrap: wrap; /* التفاف العناصر عند انتهاء المساحة */
+    justify-content: space-between; /* توزيع البطاقات بالتساوي */
+    padding: 20px; /* مسافات داخلية حول القائمة */
+}
+
+.lawyer-card {
+    position: relative; /* لتحديد موقع المحتوى داخل البطاقة */
+    margin: 10px; /* مسافة حول البطاقة */
+    flex: 1 1 calc(50% - 20px); /* عرض البطاقة بنصف العرض المتاح */
+    max-width: calc(50% - 20px); /* أقصى عرض للبطاقة */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+}
+
+.lawyer-card img {
+    width: 100%; /* عرض الصورة بنسبة 100% */
+    height: 200px; /* ارتفاع الصورة */
+    object-fit: cover; /* ضبط الصورة لتغطية المساحة المتاحة */
+    border-radius: 10px; /* زوايا مستديرة للصورة */
+    box-shadow: 0 4px 10px var(--image-shadow); /* إضافة ظل للصورة */
+}
+
+.lawyer-name {
+    font-size: 18px; /* حجم النص */
+    font-weight: bold; /* نص غامق */
+    margin-bottom: 20px; /* مسافة أسفل الاسم */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+}
+
+
+
+     .lawyer-name {
+    position: absolute; /* تحديد موضع الاسم */
+    bottom: 60px; /* المسافة من الأسفل */
+    left: 20px; /* المسافة من اليسار */
+    right: 20px; /* المسافة من اليمين */
+    background-color: rgba(0, 0, 0, 0.7); /* خلفية داكنة شبه شفافة */
+    color: white; /* لون النص */
+    padding: 5px 1px; /* مسافات داخلية حول النص */
+    border-radius: 10px; /* زوايا مستديرة للصندوق */
+    text-align: center; /* محاذاة النص في الوسط */
+}
+
+.lawyer-address {
+    position: absolute; /* تحديد موضع العنوان */
+    bottom: 49px; /* المسافة من الأسفل */
+    left: 10px; /* المسافة من اليسار */
+    right: 10px; /* المسافة من اليمين */
+    background-color: rgba(0, 0, 0, 0.7); /* خلفية داكنة شبه شفافة */
+    color: white; /* لون النص */
+    padding: 1px 20px; /* مسافات داخلية حول النص */
+    border-radius: 20px; /* زوايا مستديرة للصندوق */
+    text-align: center; /* محاذاة النص في الوسط */
+    font-size: 18px; /* حجم النص */
+}
+
+.message-icon {
+    position: fixed; /* تثبيت الأيقونة في الأسفل */
+    bottom: 30px; /* المسافة من الأسفل */
+    right: 30px; /* المسافة من اليمين */
+    background-color: var(--primary-color); /* لون الخلفية */
+    color: #fff; /* لون النص */
+    border: none; /* إزالة الحدود */
+    border-radius: 50%; /* جعل الأيقونة دائرية */
+    width: 70px; /* عرض الأيقونة */
+    height: 70px; /* ارتفاع الأيقونة */
+    font-size: 26px; /* حجم الأيقونة */
+    display: flex; /* عرض الأيقونة بشكل مرن */
+    justify-content: center; /* محاذاة الأيقونة في الوسط أفقيًا */
+    align-items: center; /* محاذاة الأيقونة في الوسط عموديًا */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* إضافة ظل للأيقونة */
+    z-index: 1000; /* ترتيب الأيقونة فوق العناصر الأخرى */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* انتقال سلس لتغيير الخلفية والتكبير */
+}
+
+.message-icon:hover {
+    background-color: var(--secondary-color); /* تغيير لون الخلفية عند التمرير */
+    transform: scale(1.1); /* تكبير الأيقونة عند التمرير */
+}
+
+#messageModal {
+    display: none; /* إخفاء المودال افتراضيًا */
+    position: fixed; /* تثبيت المودال في الأسفل */
+    bottom: 50px; /* المسافة من الأسفل */
+    right: 30px; /* المسافة من اليمين */
+    width: 300px; /* عرض المودال */
+    height: 500px; /* ارتفاع المودال */
+    background-color: var(--card-color); /* لون خلفية المودال */
+    border-radius: 20px; /* زوايا مستديرة للمودال */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* إضافة ظل للمودال */
+    z-index: 1000; /* ترتيب المودال فوق العناصر الأخرى */
+    overflow: hidden; /* إخفاء أي محتوى يتجاوز حدود المودال */
+    transition: opacity 0.3s ease, transform 0.3s ease; /* انتقال سلس للشفافية والتحريك */
+}
+
+#messageModal.active {
+    display: block; /* عرض المودال عند تفعيله */
+    opacity: 1; /* شفافية كاملة */
+    transform: translateY(0); /* إعادة المودال إلى موضعه الأصلي */
+}
+
+.modal-content {
+    display: flex; /* عرض المحتوى بشكل مرن */
+    flex-direction: column; /* ترتيب المحتوى عمودياً */
+    height: 100%; /* ارتفاع كامل للمودال */
+}
+
+.header {
+    display: flex; /* عرض الرأس بشكل مرن */
+    align-items: center; /* محاذاة العناصر في الوسط عموديًا */
+    justify-content: space-between; /* توزيع العناصر بشكل متساوي */
+    padding: 15px; /* مسافات داخلية للرأس */
+    border-bottom: 1px solid var(--modal-border); /* حد سفلي للرأس */
+    background-color: var(--primary-color); /* لون خلفية الرأس */
+    color: white; /* لون النص في الرأس */
+}
+
+.header h2 {
+    margin: 0; /* إزالة الهوامش الافتراضية للنص */
+    font-size: 18px; /* حجم النص */
+    font-weight: 600; /* نص غامق */
+}
+
+.header button {
+    background: none; /* إزالة خلفية الزر */
+    border: none; /* إزالة الحدود */
+    color: white; /* لون النص */
+    font-size: 24px; /* حجم النص */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+}
+
+.messages {
+    flex: 1; /* جعل مساحة الرسائل قابلة للتوسع */
+    overflow-y: auto; /* إضافة تمرير عمودي إذا لزم الأمر */
+    padding: 15px; /* مسافات داخلية للرسائل */
+    background-color: var(--background-color); /* لون خلفية الرسائل */
+}
+
+.message {
+    display: flex; /* عرض الرسائل بشكل مرن */
+    align-items: flex-end; /* محاذاة العناصر في أسفل الرسالة */
+    margin-bottom: 15px; /* مسافة أسفل الرسالة */
+}
+
+.message p {
+    margin: 0; /* إزالة الهوامش الافتراضية للنص */
+    padding: 10px 15px; /* مسافات داخلية للنص */
+    border-radius: 18px; /* زوايا مستديرة للنص */
+    max-width: 75%; /* أقصى عرض للنص */
+    font-size: 14px; /* حجم النص */
+    line-height: 20px; /* ارتفاع السطر */
+}
+
+.message.sent p {
+    background-color: var(--primary-color); /* لون خلفية الرسالة المرسلة */
+    color: white; /* لون النص */
+    margin-left: auto; /* دفع الرسالة إلى اليمين */
+}
+
+.message.received p {
+    background-color: white; /* لون خلفية الرسالة المستلمة */
+    color: var(--text-color); /* لون النص */
+    border: 1px solid var(--modal-border); /* حد للرسالة المستلمة */
+}
+
+
+    .message img {
+    max-width: 30%; /* تحديد أقصى عرض للصورة داخل الرسالة */
+    border-radius: 10px; /* زوايا مستديرة للصورة */
+    margin: 0 10px; /* مسافة على الجوانب الأفقية للصورة */
+}
+
+.message-input {
+    display: flex; /* عرض المدخل بشكل مرن */
+    align-items: center; /* محاذاة العناصر في الوسط عموديًا */
+    padding: 15px; /* مسافات داخلية للمدخل */
+    border-top: 1px solid var(--modal-border); /* حد علوي للمدخل */
+    background-color: var(--card-color); /* لون خلفية المدخل */
+}
+
+.message-input textarea {
+    flex-grow: 1; /* توسيع منطقة النص لتملأ المساحة المتاحة */
+    border: 1px solid var(--modal-border); /* حد حول منطقة النص */
+    border-radius: 25px; /* زوايا مستديرة لمنطقة النص */
+    padding: 10px 15px; /* مسافات داخلية حول النص */
+    font-size: 14px; /* حجم النص */
+    resize: none; /* إلغاء إمكانية تغيير حجم منطقة النص */
+    outline: none; /* إزالة الإطار الافتراضي عند التركيز */
+    background-color: var(--background-color); /* لون خلفية منطقة النص */
+}
+
+.message-input button {
+    background: none; /* إزالة خلفية الزر */
+    border: none; /* إزالة الحدود */
+    color: var(--primary-color); /* لون النص */
+    font-weight: 600; /* نص غامق */
+    font-size: 16px; /* حجم النص */
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+    padding: 0 10px; /* مسافات داخلية على الجوانب الأفقية */
+    margin-left: 10px; /* مسافة على الجانب الأيسر */
+    transition: color 0.3s ease; /* انتقال سلس لتغيير اللون */
+}
+
+.message-input button:hover {
+    color: var(--secondary-color); /* تغيير اللون عند التمرير فوق الزر */
+}
+
+#fileInput {
+    display: none; /* إخفاء عنصر إدخال الملفات */
+}
+
+.file-label {
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+    margin-right: 10px; /* مسافة على الجانب الأيمن */
+}
+
+.file-label svg {
+    width: 24px; /* عرض الأيقونة */
+    height: 24px; /* ارتفاع الأيقونة */
+    fill: #262626; /* لون الأيقونة */
+}
+
+.icon-container {
+    display: flex; /* عرض الأيقونات بشكل مرن */
+    justify-content: center; /* محاذاة الأيقونات في الوسط أفقيًا */
+    gap: 50px; /* المسافة بين الأيقونات */
+    margin-top: 20px; /* المسافة من الأعلى */
+}
+
+.icon-box {
+    cursor: pointer; /* مؤشر الفأرة يصبح شكل اليد عند التمرير */
+    font-size: 40px; /* حجم الأيقونة */
+    color: #555; /* لون الأيقونة */
+    transition: color 0.3s; /* انتقال سلس لتغيير اللون */
+    display: flex; /* عرض الأيقونات بشكل مرن */
+    flex-direction: column; /* ترتيب الأيقونات عمودياً */
+    align-items: center; /* محاذاة الأيقونات في الوسط عموديًا */
+}
+
+.icon-box:hover {
+    color: #ff4b5c; /* تغيير اللون عند التمرير فوق الأيقونة */
+}
+
+.icon-box i {
+    margin-bottom: 10px; /* مسافة أسفل الأيقونة */
+}
+
+.icon-box span {
+    font-size: 20px; /* حجم نص الوصف */
+    color: #333; /* لون نص الوصف */
+}
+
+ </style></head>
+<body>
+    <!-- رأس الصفحة -->
+    <header>
+        <div class="title-bar">
+            <!-- زر القائمة الجانبية -->
+            <button id="menu-btn"><i class="fas fa-bars"></i></button>
+            <!-- عنوان الصفحة -->
+            <h1>دليل الاطباء</h1>
+            <!-- زر البحث -->
+            <button id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+    </header>
+
+    <!-- قسم الفلترة -->
+    <div id="filter-section">
+        <select id="filter-type">
+            <option value="name">الاسم</option>
+            <option value="address">العنوان</option>
+        </select>
+        <input type="text" id="filter-input" placeholder="أدخل كلمة البحث...">
+    </div>
+
+    <!-- الشريط الجانبي -->
+    <aside id="sidebar">
+        <!-- زر إغلاق الشريط الجانبي -->
+        <button id="close-sidebar" class="close-sidebar-button"><i class="fas fa-times"></i></button>
+        <!-- قائمة التنقل -->
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="recent.html"><i class="fas fa-history"></i> آخر الزيارات</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                <li><a href="about.html"><i class="fas fa-info-circle"></i> عن التطبيق</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- حاوية البحث -->
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="ابحث عن دكتور...">
+        <i id="close-search" class="fas fa-times"></i>
+    </div>
+
+    <!-- قائمة الأطباء -->
+    <div id="lawyers-list">
+        <!-- سيتم إضافة بطاقات الدكتور هنا بشكل ديناميكي -->
+    </div>
+
+    <!-- شريط الأدوات السفلي -->
+    <div id="bottom-toolbar">
+        <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+        <a href="#" id="add-lawyer-btn"><i class="fas fa-plus-circle"></i> إضافة دكتور</a>
+    </div>
+
+    <!-- نموذج إضافة دكتور -->
+    <div id="form-container" class="form-container">
+        <form id="lawyer-form">
+            <input type="text" id="name" name="name" placeholder="اسم الدكتور" required>
+            <input type="text" id="address" name="address" placeholder="عنوان الدكتور" required>
+            <input type="tel" id="phone" name="phone" placeholder="رقم الهاتف" required>
+            <textarea id="description" name="description" placeholder="وصف قصير" required></textarea>
+            <input type="text" id="whatsapp" name="whatsapp" placeholder="رقم الواتساب (بدون +)" required>
+            <input type="url" id="facebook" name="facebook" placeholder="رابط الفيسبوك" required>
+            <input type="url" id="instagram" name="instagram" placeholder="رابط الإنستقرام" required>
+            <input type="file" id="image" name="image" accept="image/*" required>
+            <button type="submit">إضافة الدكتور</button>
+            <button type="button" id="cancel-button">إلغاء</button>
+        </form>
+    </div>
+
+    <!-- نافذة عرض تفاصيل الدكتور -->
+    <div id="lawyer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-name"></h2>
+            <p id="modal-address"></p>
+            <p id="modal-phone"></p>
+            <p id="modal-description"></p>
+            <div class="modal-links">
+                <!-- روابط إضافية يمكن إضافتها هنا -->
+            </div>
+        </div>
+    </div>
+
+    <!-- زر المراسلات -->
+    <button class="message-icon" onclick="toggleMessageModal()">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- نافذة المراسلات -->
+    <div id="messageModal">
+        <div class="modal-content">
+            <div class="header">
+                <h2>المراسلات</h2>
+                <button onclick="toggleMessageModal()">&times;</button>
+            </div>
+            <div class="messages" id="messagesContainer">
+                <!-- الرسائل ستظهر هنا -->
+            </div>
+            <div class="message-input">
+                <label for="fileInput" class="file-label">
+                    <svg aria-label="إضافة صورة أو ملف" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24">
+                        <path d="M6.549 5.013A1.557 1.557 0 1 0 8.106 6.57a1.557 1.557 0 0 0-1.557-1.557Z" fill-rule="evenodd"></path>
+                        <path d="m2 18.605 3.901-3.9a.908.908 0 0 1 1.284 0l2.807 2.806a.908.908 0 0 0 1.283 0l5.534-5.534a.908.908 0 0 1 1.283 0l3.905 3.905" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
+                        <path d="M18.44 2.004A3.56 3.56 0 0 1 22 5.564h0v12.873a3.56 3.56 0 0 1-3.56 3.56H5.568a3.56 3.56 0 0 1-3.56-3.56V5.563a3.56 3.56 0 0 1 3.56-3.56Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </label>
+                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)" />
+                <textarea id="messageInput" placeholder="أرسل رسالة..." rows="1"></textarea>
+                <button onclick="sendMessage()">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    
+    <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+    <script>
+    // إعداد Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+        authDomain: "messageemeapp.firebaseapp.com",
+        databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+        projectId: "messageemeapp",
+        storageBucket: "messageemeapp.appspot.com",
+        messagingSenderId: "278680662267",
+        appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+    };
+
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    let selectedFile = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // الحصول على عناصر HTML
+        const menuBtn = document.getElementById('menu-btn');
+        const searchBtn = document.getElementById('search-btn');
+        const closeSearchBtn = document.getElementById('close-search');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+        const searchContainer = document.getElementById('search-container');
+        const searchInput = document.getElementById('search-input');
+        const formContainer = document.getElementById('form-container');
+        const addLawyerBtn = document.getElementById('add-lawyer-btn');
+        const lawyerForm = document.getElementById('lawyer-form');
+        const lawyersList = document.getElementById('lawyers-list');
+        const modal = document.getElementById('lawyer-modal');
+        const closeModal = document.getElementsByClassName('close')[0];
+        const cancelButton = document.getElementById('cancel-button');
+        const filterType = document.getElementById('filter-type');
+        const filterInput = document.getElementById('filter-input');
+        let lawyers = [];
+
+        // فتح الشريط الجانبي
+        function openSidebar() {
+            sidebar.classList.add('active');
+        }
+
+        // إغلاق الشريط الجانبي
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+        }
+
+        // فتح حاوية البحث
+        function openSearch() {
+            searchContainer.classList.add('active');
+            searchInput.focus();
+        }
+
+        // إغلاق حاوية البحث
+        function closeSearch() {
+            searchContainer.classList.remove('active');
+            searchInput.value = '';
+        }
+
+        // فتح نموذج إضافة دكتور
+        function openAddLawyerForm() {
+            formContainer.style.display = 'block';
+        }
+
+        // إغلاق نموذج إضافة دكتور
+        function closeAddLawyerForm() {
+            formContainer.style.display = 'none';
+            lawyerForm.reset();
+        }
+
+        // عرض قائمة الأطباء
+        function displayLawyers(lawyersArray) {
+            lawyersList.innerHTML = '';
+            lawyersArray.forEach(lawyer => {
+                const card = document.createElement('div');
+                card.classList.add('lawyer-card');
+                card.innerHTML = `
+                    <img src="${lawyer.image}" alt="${lawyer.name}">
+                    <div class="lawyer-name">${lawyer.name}</div>
+                    <div class="lawyer-address">${lawyer.address}</div>
+                    <div class="lawyer-likes">
+                        <div class="like-button-container">
+                            <i class="fas fa-thumbs-up like-button ${lawyer.liked ? 'active' : ''}" onclick="toggleLike('${lawyer.id}', this)"></i>
+                            <span class="count-number">${lawyer.likes || 0}</span>
+                        </div>
+                        <div class="rate-button-container">
+                            <i class="fas fa-star rate-button ${lawyer.rated ? 'active' : ''}" onclick="toggleRate('${lawyer.id}', this)"></i>
+                            <span class="count-number">${lawyer.rating || 0}</span>
+                        </div>
+                        <div class="favorite-button-container">
+                            <i class="fas fa-heart favorite-button ${lawyer.favorited ? 'active' : ''}" onclick="toggleFavorite('${lawyer.id}', this)"></i>
+                            <span class="count-number">${lawyer.favorites || 0}</span>
+                        </div>
+                    </div>
+                `;
+                // إضافة حدث عند النقر على اسم الدكتور لعرض التفاصيل
+                card.querySelector('.lawyer-name').addEventListener('click', () => showLawyerDetails(lawyer));
+                lawyersList.appendChild(card);
+            });
+        }
+
+        // تصفية الأطباء حسب النوع والقيمة
+        function filterLawyers() {
+            const filterValue = filterInput.value.toLowerCase().trim();
+            console.log("Filter type:", filterType.value);
+            console.log("Filter value:", filterValue);
+            const filteredLawyers = lawyers.filter(lawyer => {
+                if (filterType.value === 'name') {
+                    return lawyer.name.toLowerCase().includes(filterValue);
+                } else if (filterType.value === 'address') {
+                    console.log("Checking address:", lawyer.address.toLowerCase(), "includes", filterValue);
+                    return lawyer.address.toLowerCase().includes(filterValue);
+                }
+                return false;
+            });
+            console.log("Filtered lawyers:", filteredLawyers);
+            displayLawyers(filteredLawyers);
+        }
+    
+
+    // إضافة مستمعين للأحداث لتصفية الأطباء عند إدخال النص أو تغيير نوع الفلتر
+    filterInput.addEventListener('input', filterLawyers);
+    filterType.addEventListener('change', filterLawyers);
+
+    // التعامل مع إرسال نموذج إضافة دكتور
+    lawyerForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        
+        // الحصول على بيانات النموذج
+        const formData = new FormData(lawyerForm);
+        const lawyerData = {
+            name: formData.get('name'),
+            address: formData.get('address'),
+            phone: formData.get('phone'),
+            description: formData.get('description'),
+            imageFile: formData.get('image'),
+            whatsapp: formData.get('whatsapp'),
+            facebook: formData.get('facebook'),
+            instagram: formData.get('instagram'),
+            likes: 0,
+            rating: 0,
+            favorites: 0,
+            liked: false,
+            rated: false,
+            favorited: false
+        };
+
+        // تحميل صورة الدكتور إلى Firebase Storage
+        const imageRef = storage.ref().child(`lawyer_images/${Date.now()}_${lawyerData.imageFile.name}`);
+        imageRef.put(lawyerData.imageFile).then(snapshot => {
+            return snapshot.ref.getDownloadURL();
+        }).then(downloadURL => {
+            // إضافة بيانات الدكتور إلى Firestore
+            return db.collection('lawyers1').add({
+                name: lawyerData.name,
+                address: lawyerData.address,
+                phone: lawyerData.phone,
+                description: lawyerData.description,
+                image: downloadURL,
+                whatsapp: lawyerData.whatsapp,
+                facebook: lawyerData.facebook,
+                instagram: lawyerData.instagram,
+                likes: lawyerData.likes,
+                rating: lawyerData.rating,
+                favorites: lawyerData.favorites,
+                liked: lawyerData.liked,
+                rated: lawyerData.rated,
+                favorited: lawyerData.favorited
+            });
+        }).then(docRef => {
+            console.log("تم إضافة المستند بالمعرف: ", docRef.id);
+            lawyerForm.reset();
+            closeAddLawyerForm();
+            loadLawyersFromDB();
+        }).catch(error => {
+            console.error("خطأ في إضافة المستند: ", error);
+        });
+    });
+
+    // تحميل بيانات الأطباء من Firestore
+    function loadLawyersFromDB() {
+        db.collection('lawyers1').get().then(querySnapshot => {
+            lawyers = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                name: doc.data().name,
+                address: doc.data().address,
+                phone: doc.data().phone,
+                description: doc.data().description,
+                image: doc.data().image,
+                whatsapp: doc.data().whatsapp,
+                facebook: doc.data().facebook,
+                instagram: doc.data().instagram,
+                likes: doc.data().likes || 0,
+                rating: doc.data().rating || 0,
+                favorites: doc.data().favorites || 0,
+                liked: doc.data().liked || false,
+                rated: doc.data().rated || false,
+                favorited: doc.data().favorited || false
+            }));
+            displayLawyers(lawyers);
+            console.log("تم تحميل الأطباء:", lawyers);
+        }).catch(error => {
+            console.error("خطأ في تحميل الأطباء:", error);
+        });
+    }
+
+    // إضافة مستمعين للأحداث لفتح وإغلاق الشريط الجانبي والبحث ونموذج إضافة الدكتور
+    menuBtn.addEventListener('click', openSidebar);
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    searchBtn.addEventListener('click', openSearch);
+    closeSearchBtn.addEventListener('click', closeSearch);
+    addLawyerBtn.addEventListener('click', openAddLawyerForm);
+    cancelButton.addEventListener('click', closeAddLawyerForm);
+
+    // إغلاق نافذة العرض عند النقر على زر الإغلاق أو خارج النافذة
+    closeModal.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+        if (event.target == formContainer) {
+            closeAddLawyerForm();
+        }
+    }
+
+    // إغلاق البحث والشريط الجانبي والنوافذ عند الضغط على مفتاح "Escape"
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeSearch();
+            closeSidebar();
+            modal.style.display = 'none';
+            closeAddLawyerForm();
+        }
+    });
+
+    // تحميل الأطباء عند تحميل الصفحة
+    loadLawyersFromDB();
+});
+
+
+// إنشاء أو استرجاع معرف فريد للجهاز
+function getUniqueId() {
+    let uniqueId = localStorage.getItem('uniqueId');
+    if (!uniqueId) {
+        uniqueId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+        localStorage.setItem('uniqueId', uniqueId);
+    }
+    return uniqueId;
+}
+
+// تبديل حالة الإعجاب للدكتور
+function toggleLike(lawyerId, button) {
+    const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+    const userId = getUniqueId();  // استرجاع المعرف الفريد
+
+    lawyerRef.get().then(doc => {
+        if (doc.exists) {
+            const currentLikes = doc.data().likes || 0;
+            const likedBy = doc.data().likedBy || []; // قائمة المستخدمين الذين أعجبوا
+
+            // التحقق إذا كان المستخدم قد أعجب بالفعل
+            const userHasLiked = likedBy.includes(userId);
+
+            // تحديث الإعجاب بناءً على حالة المستخدم
+            const newLikes = userHasLiked ? currentLikes - 1 : currentLikes + 1;
+            const updatedLikedBy = userHasLiked ? likedBy.filter(id => id !== userId) : [...likedBy, userId];
+
+            lawyerRef.update({
+                likes: newLikes,
+                likedBy: updatedLikedBy
+            }).then(() => {
+                // تحديث حالة الزر
+                button.classList.toggle('active');
+                const countElement = button.nextElementSibling;
+                countElement.textContent = newLikes;
+            }).catch(error => {
+                console.error("خطأ في تحديث الإعجابات: ", error);
+            });
+        }
+    }).catch(error => {
+        console.error("خطأ في الحصول على المستند: ", error);
+    });
+}
+
+// تبديل حالة التقييم للدكتور
+function toggleRate(lawyerId, button) {
+    const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+    const userId = getUniqueId();  // استرجاع المعرف الفريد
+
+    lawyerRef.get().then(doc => {
+        if (doc.exists) {
+            const currentRating = doc.data().rating || 0;
+            const ratedBy = doc.data().ratedBy || []; // قائمة المستخدمين الذين قيموا
+
+            // التحقق إذا كان المستخدم قد قيم بالفعل
+            const userHasRated = ratedBy.includes(userId);
+
+            // تحديث التقييم بناءً على حالة المستخدم
+            const newRating = userHasRated ? currentRating - 1 : currentRating + 1;
+            const updatedRatedBy = userHasRated ? ratedBy.filter(id => id !== userId) : [...ratedBy, userId];
+
+            lawyerRef.update({
+                rating: newRating,
+                ratedBy: updatedRatedBy
+            }).then(() => {
+                // تحديث حالة الزر
+                button.classList.toggle('active');
+                const countElement = button.nextElementSibling;
+                countElement.textContent = newRating;
+            }).catch(error => {
+                console.error("خطأ في تحديث التقييم: ", error);
+            });
+        }
+    }).catch(error => {
+        console.error("خطأ في الحصول على المستند: ", error);
+    });
+}
+
+// تبديل حالة إضافة للدكتور للمفضلة
+function toggleFavorite(lawyerId, button) {
+    const lawyerRef = db.collection('lawyers1').doc(lawyerId);
+    const userId = getUniqueId();  // استرجاع المعرف الفريد
+
+    lawyerRef.get().then(doc => {
+        if (doc.exists) {
+            const currentFavorites = doc.data().favorites || 0;
+            const favoritedBy = doc.data().favoritedBy || []; // قائمة المستخدمين الذين أضافوا للمفضلة
+
+            // التحقق إذا كان المستخدم قد أضاف للمفضلة بالفعل
+            const userHasFavorited = favoritedBy.includes(userId);
+
+            // تحديث المفضلة بناءً على حالة المستخدم
+            const newFavorites = userHasFavorited ? currentFavorites - 1 : currentFavorites + 1;
+            const updatedFavoritedBy = userHasFavorited ? favoritedBy.filter(id => id !== userId) : [...favoritedBy, userId];
+
+            lawyerRef.update({
+                favorites: newFavorites,
+                favoritedBy: updatedFavoritedBy
+            }).then(() => {
+                // تحديث حالة الزر
+                button.classList.toggle('active');
+                const countElement = button.nextElementSibling;
+                countElement.textContent = newFavorites;
+            }).catch(error => {
+                console.error("خطأ في تحديث المفضلة: ", error);
+            });
+        }
+    }).catch(error => {
+        console.error("خطأ في الحصول على المستند: ", error);
+    });
+}
+
+// تبديل حالة نافذة الرسائل
+function toggleMessageModal() {
+    const modal = document.getElementById('messageModal');
+    modal.classList.toggle('active');
+    if (modal.classList.contains('active')) {
+        loadMessages();
+    }
+}
+
+// التعامل مع اختيار ملف لتحميله
+function handleFileSelect(event) {
+    selectedFile = event.target.files[0];
+    if (selectedFile) {
+        sendFile();
+    }
+}
+
+// إرسال رسالة نصية
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+
+    if (message === '') return;
+
+    db.collection('messages').add({
+        text: message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        status: 'sent',
+        type: 'text'
+    }).then(() => {
+        messageInput.value = '';
+        loadMessages();
+    }).catch((error) => {
+        console.error('خطأ في إرسال الرسالة: ', error);
+    });
+}
+
+// إرسال ملف
+function sendFile() {
+    if (!selectedFile) return;
+
+    const storageRef = storage.ref(`files/${Date.now()}_${selectedFile.name}`);
+    const uploadTask = storageRef.put(selectedFile);
+
+    uploadTask.on('state_changed',
+        (snapshot) => {
+            // يمكن إضافة شريط تقدم هنا
+        },
+        (error) => {
+            console.error('خطأ في رفع الملف: ', error);
+        },
+        () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                db.collection('messages').add({
+                    imageUrl: downloadURL,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'sent',
+                    type: 'image'
+                }).then(() => {
+                    selectedFile = null;
+                    document.getElementById('fileInput').value = '';
+                    loadMessages();
+                }).catch((error) => {
+                    console.error('خطأ في إرسال الرسالة: ', error);
+                });
+            });
+        }
+    );
+}
+
+function loadMessages() {
+    const messagesContainer = document.getElementById('messagesContainer');
+    messagesContainer.innerHTML = '';
+
+    db.collection('messages').orderBy('timestamp', 'desc').limit(20).get().then((snapshot) => {
+        const messages = [];
+        snapshot.forEach((doc) => {
+            messages.push(doc.data());
+        });
+        messages.reverse().forEach((messageData) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', messageData.status);
+
+            if (messageData.type === 'text') {
+                messageElement.innerHTML = `<p>${messageData.text}</p>`;
+            } else if (messageData.type === 'image') {
+                messageElement.innerHTML = `<img src="${messageData.imageUrl}" alt="صورة مرسلة">`;
+            }
+
+            messagesContainer.appendChild(messageElement);
+        });
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+}
+
+function showLawyerDetails(lawyer) {
+    window.location.href = `lawyer-details.html?id=${lawyer.id}`;
+}
+
+// CSS styles (add these to your stylesheet)
+/*
+.like-button.active,
+.rate-button.active,
+.favorite-button.active {
+    color: #FF4500;
+}
+*/
+
+// Make sure to call loadLawyersFromDB() when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadLawyersFromDB();
+});
+
+
+
+// تحميل الرسائل عند بدء التطبيق
+loadMessages();
+</script>
+    </script>
+</body>
+</html>
